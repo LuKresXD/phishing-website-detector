@@ -1,5 +1,6 @@
+// Basic heuristic checks for URL phishing
 exports.checkPhishing = function(url) {
-    // Placeholder for phishing detection logic
-    // You can implement regex checks, compare against a known list of phishing URLs, etc.
-    return false;  // Assuming a dummy response for now
-}
+    // Simple heuristic: check if URL contains suspicious strings
+    const suspiciousPatterns = ['login', 'verify', 'account', 'secure', 'banking'];
+    return suspiciousPatterns.some(pattern => url.includes(pattern));
+};
