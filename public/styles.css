@@ -1,0 +1,13 @@
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@^2.0/dist/tailwind.min.css');
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.url-input {
+    width: 80%;
+    margin: 10px 0;
+    padding: 8px;
+}
