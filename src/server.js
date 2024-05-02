@@ -7,14 +7,15 @@ const phishingDetector = require('./phishingDetector'); // Correct import of phi
 
 app.use(express.static('public'));
 
-app.get('/check', (req, res) => {
+app.get('/check', async (req, res) => {
     const url = req.query.url;
     if (!url) {
         return res.status(400).json({ error: 'URL parameter is required.' });
     }
-    const isPhishing = phishingDetector.checkPhishing(url);
+    const isPhishing = await phishingDetector.checkPhishing(url);
     res.json({ isPhishing });
 });
+
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
