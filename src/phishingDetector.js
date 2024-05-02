@@ -7,10 +7,11 @@ async function checkPhishing(url) {
             headers: {'Authorization': 'Bearer YOUR_API_KEY'}
         });
         const jsonResponse = await apiResponse.json();
-        return jsonResponse.isPhishing;
+        const safetyScore = jsonResponse.safetyScore;
+        return { isPhishing: safetyScore < 50, safetyScore };
     } catch (error) {
         console.error('Failed to fetch from ML API:', error);
-        return false;
+        return { isPhishing: false, safetyScore: 100 };
     }
 }
 

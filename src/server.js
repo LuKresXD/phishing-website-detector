@@ -11,8 +11,8 @@ app.get('/check', async (req, res) => {
     if (!url) {
         return res.status(400).json({ error: 'URL parameter is required.' });
     }
-    const isPhishing = await checkPhishing(url);
-    res.json({ isPhishing });
+    const { isPhishing, safetyScore } = await checkPhishing(url);
+    res.json({ isPhishing, safetyScore });
 });
 
 app.listen(port, () => {
