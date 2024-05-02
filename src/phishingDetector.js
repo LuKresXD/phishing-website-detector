@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-exports.checkPhishing = async function(url) {
+async function checkPhishing(url) {
     try {
         const apiResponse = await fetch(`https://api.example.com/check?url=${encodeURIComponent(url)}`, {
             method: 'GET',
@@ -12,4 +12,6 @@ exports.checkPhishing = async function(url) {
         console.error('Failed to fetch from ML API:', error);
         return false;
     }
-};
+}
+
+export { checkPhishing };
