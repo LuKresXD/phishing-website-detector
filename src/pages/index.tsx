@@ -5,7 +5,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 export default function Home() {
-    const [pageLoad, setPageLoad] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [url, setUrl] = useState('google.com');
     const [result, setResult] = useState('Enter website');
     const [safetyScore, setSafetyScore] = useState(100);
@@ -17,14 +17,17 @@ export default function Home() {
     }
 
     async function handleCheck() {
-        const finalUrl = url;
-        if (finalUrl) {
-            checkVirusTotal(finalUrl);
-            setUrl('');
-        }
+    setIsLoading(true);
+    const finalUrl = url;
+    if (finalUrl) {
+        await checkVirusTotal(finalUrl);
+        setUrl('');
     }
+    setIsLoading(false);
+}
 
     async function checkVirusTotal(checkUrl: string) {
+        setIsLoading(true);
         const scanId = await sendUrlToVirusTotal(checkUrl);
         if (scanId) {
             const analysisResult = await waitForAnalysisCompletion(scanId);
@@ -39,6 +42,7 @@ export default function Home() {
                 setResult('Safe');
             }
         }
+        setIsLoading(false);
     }
 
     async function waitForAnalysisCompletion(scanId: string) {
@@ -99,8 +103,12 @@ export default function Home() {
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <main className='flex h-screen flex-col justify-center pattern-grid-lg text-primary overflow-x-hidden'>
-                <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+            <main
+                className='flex h-screen flex-col justify-center pattern-grid-lg text-primary overflow-x-hidden'>
+                {isLoading && (
+                    <div className="absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-4 border-t-4 border-gray-700 border-t-white rounded-full animate-spin"></div>
+                )}
+                <div className={`container mx-auto px-4 sm:px-6 lg:px-8 brightness-100 transition-all ${isLoading ? 'brightness-50' : ''}`}>
                     <h1 className='font-bold sm:text-6xl text-4xl font-poppins text-center'>
                         <span className="text-blue-500">Phishing</span> <span className="text-blue-100">Website Detector 🕵🏻‍♂️</span>
                     </h1>
@@ -137,7 +145,9 @@ export default function Home() {
                                     <p className="text-blue-100 text-l font-poppins mx-2 py-0.5">Website is:</p>
                                     <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-0.5">{result}</p>
                                     <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-1.5">{"ㅤ"}</p>
-                                    <p className="text-blue-100/50 text-l font-poppins mx-2 py-1">{scannedUrl}</p>
+                                    <div className="text-blue-100/50 text-l font-poppins mx-2 py-1">
+                                        {scannedUrl.length > 50 ? `${scannedUrl.substring(0, 47)}...` : scannedUrl}
+                                    </div>
                                 </div>
                                 <div style={{width: 150, height: 150}}>
                                     <CircularProgressbar

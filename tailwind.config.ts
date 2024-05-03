@@ -29,9 +29,14 @@ const config: Config = {
           '75%': { transform: 'rotate(20deg)' },
           '100%': { transform: 'rotate(0deg)' },
         },
+        spin: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'wave': 'wave 0.8s linear',
+        spin: 'spin 1s linear infinite',
       },
     },
   },
