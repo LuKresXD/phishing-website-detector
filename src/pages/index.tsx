@@ -7,7 +7,7 @@ import 'react-circular-progressbar/dist/styles.css';
 export default function Home() {
     const [pageLoad, setPageLoad] = useState(false);
     const [url, setUrl] = useState('google.com');
-    const [result, setResult] = useState('STATUS HERE');
+    const [result, setResult] = useState('Enter website');
     const [safetyScore, setSafetyScore] = useState(100);
     const [analysisId, setAnalysisId] = useState('');
     const [scannedUrl, setScannedUrl] = useState('');
@@ -104,7 +104,7 @@ export default function Home() {
                     <h1 className='font-bold sm:text-6xl text-4xl font-poppins text-center'>
                         <span className="text-blue-500">Phishing</span> <span className="text-blue-100">Website Detector 🕵🏻‍♂️</span>
                     </h1>
-                    <p className='text-blue-100 text-lg text-center mt-4'>
+                    <p className='text-blue-100 text-lg text-center mt-4 font-poppins'>
                         Enter a URL below to check if the website is safe.
                     </p>
                     <div className='w-full mx-auto pt-8 flex flex-col items-center'>
@@ -123,35 +123,33 @@ export default function Home() {
                                 Check
                             </button>
                         </div>
-                        <div
-                            className="relative md:scale-100 min-[460px]:scale-[0.8] min-[400px]:scale-[0.7] scale-[0.6] mx-3.5 duration-500">
+                        <div className="relative w-full max-w-[35rem] mx-auto p-4 my-4">
                             <div
-                                className="absolute inset-0 bg-transparent pattern-dots-md rounded-md transform-gpu scale-125 translate-x-8 translate-y-8"
-                                style={{
+                                className="absolute top-0 right-0 bottom-0 left-0 z-8 transform translate-x-8 translate-y-8 p-4">
+                                <div className="w-full h-full bg-transparent" style={{
                                     backgroundImage: "radial-gradient(circle, #1d4ed8 1px, transparent 1px)",
                                     backgroundSize: "10px 10px"
                                 }}></div>
+                            </div>
                             <div
-                                className="relative bg-[#313338] p-4 w-[30rem] h-full flex flex-col rounded-md xs:-translate-x-8 xs:-translate-y-8 translate-y-0 translate-x-0"
-                                style={{opacity: 1}}>
-                                <div className="flex w-full justify-around items-center">
-                                    <div className="text-lg">
-                                        <p className="text-blue-100 text-xl mt-2">Website is</p>
-                                        <p className="text-blue-500 font-bold text-2xl mt-2">{result}</p>
-                                        <p className="text-blue-100 text-xl mt-2">{scannedUrl}</p>
-                                    </div>
-                                    <div style={{width: 150, height: 150}}>
-                                        <CircularProgressbar
-                                            value={safetyScore}
-                                            text={`${safetyScore}%`}
-                                            styles={buildStyles({
-                                                textColor: 'white',
-                                                pathColor: `rgb(${255 - Math.round((255 * safetyScore) / 100)}, ${Math.round((255 * safetyScore) / 100)}, 0)`,
-                                                trailColor: 'black',
-                                                textSize: '16px'
-                                            })}
-                                        />
-                                    </div>
+                                className="relative flex justify-between items-start bg-[#313338] p-4 rounded-md shadow-lg z-10">
+                                <div className="flex flex-col">
+                                    <p className="text-blue-100 text-l font-poppins mx-2 py-0.5">Website is:</p>
+                                    <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-0.5">{result}</p>
+                                    <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-1.5">{"ㅤ"}</p>
+                                    <p className="text-blue-100/50 text-l font-poppins mx-2 py-1">{scannedUrl}</p>
+                                </div>
+                                <div style={{width: 150, height: 150}}>
+                                    <CircularProgressbar
+                                        value={safetyScore}
+                                        text={`${safetyScore}%`}
+                                        styles={buildStyles({
+                                            textColor: 'white',
+                                            pathColor: `rgb(${255 - Math.round((255 * safetyScore) / 100)}, ${Math.round((255 * safetyScore) / 100)}, 0)`,
+                                            trailColor: 'black',
+                                            textSize: '16px'
+                                        })}
+                                    />
                                 </div>
                             </div>
                         </div>
