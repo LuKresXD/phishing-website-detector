@@ -1,11 +1,14 @@
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 export default function Home() {
     const [pageLoad, setPageLoad] = useState(false);
     const [url, setUrl] = useState('');
     const [result, setResult] = useState('');
+    const [trustScore, setTrustScore] = useState(0);
 
     useEffect(() => {
         setPageLoad(true);
@@ -30,13 +33,17 @@ export default function Home() {
                 const response = await axios.request(options);
                 if (response.data && response.data.length > 0 && response.data[0].safety) {
                     const safety = response.data[0].safety.status;
+                    const trustPercent = response.data[0].safety.reputations || 0; // Используйте этот процент в индикаторе
+                    setTrustScore(trustPercent);
                     setResult(`URL Safety Status: ${safety}`);
                 } else {
                     setResult('No safety data available for this URL');
+                    setTrustScore(0);
                 }
             } catch (error) {
                 console.error('Error fetching from WOT API:', error);
                 setResult('Failed to check the URL due to an error.');
+                setTrustScore(0);
             }
             setUrl('');
         }
@@ -72,8 +79,21 @@ export default function Home() {
                                 onKeyDown={handleCheck}
                                 className="pl-2 block w-full rounded-md border-0 py-1.5 pr-14 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6"
                             />
-                            <p className="text-white mt-4">{result}</p>
+                            <div style={{ width: 100, height: 100, marginTop: '20px' }}>
+                                <CircularProgressbar
+                                    value={trustScore}
+                                    text={`${trustScore}%`}
+                                    styles={buildStyles({
+                                        strokeLinecap: 'butt',
+                                        textSize: '16px',
+                                        pathColor: trustScore > 50 ? 'green' : 'red',
+                                        textColor: 'white',
+                                        trailColor: '#d6d6d6',
+                                    })}
+                                />
+                            </div>
                         </div>
+                        <p className="mt-4 text-white font-leaguespartan text-sm">{result}</p>
                     </div>
                 </div>
             </main>
