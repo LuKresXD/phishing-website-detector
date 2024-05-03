@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         'leaguespartan': ['League Spartan', 'sans-serif'],
+        'poppins' : ['Poppins', 'sans-serif'],
       },
       colors: {
         text: '#ffffff',
