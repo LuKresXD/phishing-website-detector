@@ -1,5 +1,6 @@
 # Phishing Website Detector 🕵🏻‍♂️
 
+This project is an Internal Assigment on computer science by Krestinin Luka
 ## Description
 The Phishing Website Detector is a web application designed to enhance internet safety by checking URLs to determine their security status. It helps users identify potentially harmful websites, using the VirusTotal API to perform the safety checks. Built with Next.js and React, this application is an excellent tool for anyone looking to enhance their cybersecurity measures.
 
