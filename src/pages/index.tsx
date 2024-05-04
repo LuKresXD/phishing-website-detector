@@ -56,41 +56,25 @@ export default function Home() {
 
 
     async function sendUrlToVirusTotal(urlToCheck: string) {
-        console.log(urlToCheck);
-        const options = {
-            method: 'POST',
-            url: 'https://www.virustotal.com/api/v3/urls',
-            headers: {
-                'x-apikey': '009cfb8c691d07ff2b4a7bcb43affc9c372d3ffcacd4f51f3fb7b2676ce057b7',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: `url=${encodeURIComponent(urlToCheck)}`
-        };
         try {
-            const response = await axios(options);
+            const response = await axios.post('/api/proxy', { url: urlToCheck });
             return response.data.data.id;
         } catch (error) {
-            console.error('Error sending URL to VirusTotal:', error);
+            console.error('Error sending URL to proxy:', error);
             return null;
         }
     }
 
     async function getUrlAnalysis(analysisId: string) {
-        const options = {
-            method: 'GET',
-            url: `https://www.virustotal.com/api/v3/analyses/${analysisId}`,
-            headers: {
-                'x-apikey': '009cfb8c691d07ff2b4a7bcb43affc9c372d3ffcacd4f51f3fb7b2676ce057b7'
-            }
-        };
         try {
-            const response = await axios(options);
+            const response = await axios.get(`/api/proxy?id=${analysisId}`);
             return response.data;
         } catch (error) {
-            console.error('Error getting URL analysis from VirusTotal:', error);
+            console.error('Error getting URL analysis from proxy:', error);
             return null;
         }
     }
+
 
 
     return (
