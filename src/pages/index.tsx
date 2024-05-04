@@ -85,7 +85,7 @@ export default function Home() {
                 <meta name="description" content="Check if a website is safe or a phishing attempt"/>
                 <meta property='theme-color' content='#17171a'/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <link rel="icon" href="/detective.png"/>
+                <link rel="icon" href="/detective.ico"/>
             </Head>
             <main
                 className='flex h-screen flex-col justify-center pattern-grid-lg text-primary overflow-x-hidden'>
