@@ -3,6 +3,8 @@ import { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import Navbar from "@/components/Navbar";
+
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
@@ -84,6 +86,7 @@ export default function Home() {
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="icon" href="/detective.ico"/>
             </Head>
+            <Navbar />
             <div className='flex flex-col h-screen justify-between'>
                 <main className='flex flex-col justify-center grow pattern-grid-lg text-primary overflow-x-hidden'>
                     {isLoading && (
