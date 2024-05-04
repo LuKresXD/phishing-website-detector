@@ -3,7 +3,6 @@ import { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import Divider from "@/components/Divider";
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
