@@ -124,7 +124,7 @@ export default function Home() {
                                 }}></div>
                             </div>
                             <div
-                                className="relative flex justify-between items-start bg-[#313338] p-4 rounded-md shadow-lg z-10">
+                                className="relative flex justify-between font-poppins items-start bg-[#313338] p-4 rounded-md shadow-lg z-10">
                                 <div className="flex flex-col">
                                     <p className="text-blue-100 text-l font-poppins mx-2 py-0.5">Website is:</p>
                                     <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-0.5">{result}</p>
