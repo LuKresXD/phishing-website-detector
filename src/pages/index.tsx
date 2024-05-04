@@ -12,7 +12,7 @@ export default function Home() {
     const [analysisId, setAnalysisId] = useState('');
     const [scannedUrl, setScannedUrl] = useState('');
 
-    function handleInput(e) {
+    function handleInput(e: any) {
         setUrl(e.target.value);
     }
 
@@ -26,7 +26,7 @@ export default function Home() {
         setIsLoading(false);
     }
 
-    async function checkVirusTotal(checkUrl) {
+    async function checkVirusTotal(checkUrl: string) {
         setIsLoading(true);
         const scanId = await sendUrlToVirusTotal(checkUrl);
         if (scanId) {
@@ -45,7 +45,7 @@ export default function Home() {
         setIsLoading(false);
     }
 
-    async function waitForAnalysisCompletion(scanId) {
+    async function waitForAnalysisCompletion(scanId: string) {
         const analysisResult = await getUrlAnalysis(scanId);
         if (analysisResult.data.attributes.status !== "completed") {
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -54,7 +54,7 @@ export default function Home() {
         return analysisResult;
     }
 
-    async function sendUrlToVirusTotal(urlToCheck) {
+    async function sendUrlToVirusTotal(urlToCheck: string) {
         try {
             const response = await axios.post('/api/proxy', { url: urlToCheck });
             return response.data.data.id;
@@ -64,7 +64,7 @@ export default function Home() {
         }
     }
 
-    async function getUrlAnalysis(analysisId) {
+    async function getUrlAnalysis(analysisId: string) {
         try {
             const response = await axios.get(`/api/proxy?id=${analysisId}`);
             return response.data;
