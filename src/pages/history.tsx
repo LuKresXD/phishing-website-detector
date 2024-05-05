@@ -70,9 +70,9 @@ export default function HistoryPage() {
                                     </tr>
                                 ))
                             ) : (
-                                history.map(({date, result, url: string}, index) => (
+                                history.map(({date, result, url}, index) => (
                                     <tr key={index}>
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{url.length > 25 ? `${url.substring(0, 25)}...` : url}</td>
+                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{(url as string).length > 25 ? `${(url as string).substring(0, 25)}...` : url}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{new Date(date).toLocaleDateString()}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{result}</td>
                                     </tr>
