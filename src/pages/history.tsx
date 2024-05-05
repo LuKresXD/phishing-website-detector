@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 import Navbar from "@/components/Navbar";
 import axios from 'axios';
+import { useInView } from 'react-intersection-observer';
+import { motion } from "framer-motion";
 
 export default function HistoryPage() {
     const [history, setHistory] = useState([]);
@@ -36,6 +38,11 @@ export default function HistoryPage() {
         setCurrentPage(prev => (prev < totalPages ? prev + 1 : prev));
     }
 
+    const [ref, inView] = useInView({
+        threshold: 0.1,
+        triggerOnce: true,
+    });
+
     return (
         <>
             <Head>
@@ -48,17 +55,31 @@ export default function HistoryPage() {
             </Head>
             <Navbar />
             <main className='flex h-screen flex-col justify-center pattern-grid-lg text-primary overflow-x-hidden'>
-                <div className='max-w-5xl w-full mx-auto'>
-                    <h1 className='text-white font-bold sm:text-6xl text-4xl font-leaguespartan text-center'>
-                        History 📜
-                    </h1>
+                <motion.div
+                    className={`container mx-auto px-4 sm:px-6 lg:px-8 brightness-100 transition-all ${isLoading ? 'brightness-50' : ''}`}
+                    initial={{transform: 'translateY(30px)', opacity: 0}}
+                    whileInView={{transform: 'translateY(0px)', opacity: 100}}
+                    transition={{duration: 0.5, delay: 0.1, ease: [0.39, 0.21, 0.12, 0.96],}}
+                    viewport={{amount: 0.1, once: true}}
+                    ref={ref}
+                >
+                    <div className='max-w-5xl w-full mx-auto'>
+                        <h1 className='text-white font-bold sm:text-6xl text-4xl font-leaguespartan text-center'>
+                            History 📜
+                        </h1>
                         <table className="min-w-full divide-y divide-zinc-800 mt-8">
                             <thead>
-                                <tr>
-                                    <th scope="col" className="font-poppins py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-blue-100 sm:pl-0">URL</th>
-                                    <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Date</th>
-                                    <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Result</th>
-                                </tr>
+                            <tr>
+                                <th scope="col"
+                                    className="font-poppins py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-blue-100 sm:pl-0">URL
+                                </th>
+                                <th scope="col"
+                                    className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Date
+                                </th>
+                                <th scope="col"
+                                    className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Result
+                                </th>
+                            </tr>
                             </thead>
                             <tbody className="divide-y divide-zinc-700">
                             {isLoading ? (
@@ -81,29 +102,32 @@ export default function HistoryPage() {
                             </tbody>
 
                         </table>
-                    <nav
-                        className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
-                        <div className="flex flex-1 items-center gap-3">
-                            <button onClick={handlePrevious}
-                                    className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="fill-white h-6 w-6 mx-auto"
-                                     viewBox="0 0 16 16">
-                                    <path
-                                        d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"></path></svg>
+                        <nav
+                            className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
+                            <div className="flex flex-1 items-center gap-3">
+                                <button onClick={handlePrevious}
+                                        className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="fill-white h-6 w-6 mx-auto"
+                                         viewBox="0 0 16 16">
+                                        <path
+                                            d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"></path>
+                                    </svg>
                                 </button>
-                                <button onClick={handleNext} className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
+                                <button onClick={handleNext}
+                                        className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
                                     {<svg xmlns="http://www.w3.org/2000/svg" className="fill-white h-6 w-6 mx-auto"
-                                              viewBox="0 0 16 16">
-                                            <path
-                                                d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"></path>
-                                        </svg>}
+                                          viewBox="0 0 16 16">
+                                        <path
+                                            d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"></path>
+                                    </svg>}
                                 </button>
                                 <p className="text-sm text-blue-100 font-poppins">
                                     Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, totalScans)} of {totalScans} scans
                                 </p>
                             </div>
                         </nav>
-                </div>
+                    </div>
+                </motion.div>
             </main>
         </>
     );

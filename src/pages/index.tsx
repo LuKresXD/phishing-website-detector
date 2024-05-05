@@ -4,6 +4,9 @@ import axios from 'axios';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Navbar from "@/components/Navbar";
+import { useInView } from 'react-intersection-observer';
+import { motion } from "framer-motion";
+
 
 
 export default function Home() {
@@ -80,6 +83,11 @@ export default function Home() {
         }
     }
 
+    const [ref, inView] = useInView({
+        threshold: 0.1,
+        triggerOnce: true,
+    });
+
     return (
         <>
             <Head>
@@ -97,8 +105,15 @@ export default function Home() {
                         <div
                             className="absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-4 border-t-4 border-gray-700 border-t-white rounded-full animate-spin"></div>
                     )}
-                    <div className={`container mx-auto px-4 sm:px-6 lg:px-8 brightness-100 transition-all ${isLoading ? 'brightness-50' : ''}`}>
-                        <h1 className='font-bold sm:text-6xl text-4xl font-poppins text-center'>
+                    <motion.div
+                        className={`container mx-auto px-4 sm:px-6 lg:px-8 brightness-100 transition-all ${isLoading ? 'brightness-50' : ''}`}
+                        initial={{ transform: 'translateY(30px)', opacity: 0 }}
+                        whileInView={{ transform: 'translateY(0px)', opacity: 100 }}
+                        transition={{ duration: 0.5, delay: 0.1, ease: [0.39, 0.21, 0.12, 0.96], }}
+                        viewport={{ amount: 0.1, once: true }}
+                        ref={ref}
+                    >
+                        <h1 className='font-bold sm:text-6xl text-4xl font-poppins text-center text-text'>
                             <span className="text-blue-500">Phishing</span> <span className="text-blue-100">Website Detector 🕵🏻‍♂️</span>
                         </h1>
                         <p className='text-blue-100 text-lg text-center mt-4 font-poppins'>
@@ -141,21 +156,27 @@ export default function Home() {
                                         </div>
                                     </div>
                                     <div style={{width: 150, height: 150}}>
-                                        <CircularProgressbar
-                                            value={safetyScore}
-                                            text={`${safetyScore}%`}
-                                            styles={buildStyles({
-                                                textColor: 'white',
-                                                pathColor: `rgb(${255 - Math.round((255 * safetyScore) / 100)}, ${Math.round((255 * safetyScore) / 100)}, 0)`,
-                                                trailColor: 'black',
-                                                textSize: '16px'
-                                            })}
-                                        />
+                                        <div style={{
+                                            boxShadow: `0 0 10px rgba(${255 - Math.round((255 * safetyScore) / 100)}, ${Math.round((255 * safetyScore) / 100)}, 0, 0.8)`,
+                                            borderRadius: "50%",
+                                            display: "inline-block"
+                                        }}>
+                                            <CircularProgressbar
+                                                value={safetyScore}
+                                                text={`${safetyScore}%`}
+                                                styles={buildStyles({
+                                                    textColor: 'white',
+                                                    pathColor: `rgb(${255 - Math.round((255 * safetyScore) / 100)}, ${Math.round((255 * safetyScore) / 100)}, 0)`,
+                                                    trailColor: 'black',
+                                                    textSize: '16px'
+                                                })}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </main>
                 <footer>
                     <div className="h-0.5 w-full rounded-lg bg-gradient-to-r from-secondary via-accent to-secondary"/>
