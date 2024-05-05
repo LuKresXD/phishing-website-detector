@@ -123,13 +123,15 @@ export default function Home() {
                             <div className="relative w-full max-w-[35rem] mx-auto p-4 my-4">
                                 <div
                                     className="absolute top-0 right-0 bottom-0 left-0 z-8 transform translate-x-8 translate-y-8 p-4">
-                                    <div className="w-full h-full bg-transparent" style={{
-                                        backgroundImage: "radial-gradient(circle, #1d4ed8 1px, transparent 1px)",
-                                        backgroundSize: "10px 10px"
-                                    }}></div>
+                                    <div
+                                        className="absolute flex min-[1390px]:w-[20rem] min-[1390px]:h-[20rem] min-[470px]:w-[18rem] min-[470px]:h-[18rem] xs:w-[16rem] xs:h-[16rem] w-[12rem] h-[12rem] bg-blue-500 rounded-full opacity-20 blur-2xl min-[1390px]:-translate-y-26 -translate-y-20 translate-x-16 group-hover:-translate-y-38 duration-500 ease-custom"></div>
+                                    <div
+                                        className="absolute flex min-[1390px]:w-[20rem] min-[1390px]:h-[20rem] min-[470px]:w-[18rem] min-[470px]:h-[18rem] xs:w-[16rem] xs:h-[16rem] w-[12rem] h-[12rem] bg-blue-700 rounded-full opacity-20 blur-2xl -translate-x-16 group-hover:-translate-x-24 duration-500 ease-custom"></div>
+                                    <div
+                                        className="absolute flex min-[1390px]:w-[20rem] min-[1390px]:h-[20rem] min-[470px]:w-[18rem] min-[470px]:h-[18rem] xs:w-[16rem] xs:h-[16rem] w-[12rem] h-[12rem] bg-blue-600 rounded-full opacity-20 blur-2xl translate-x-32 min-[1390px]:translate-y-8 translate-y-8 group-hover:translate-x-44 duration-500 ease-custom"></div>
                                 </div>
                                 <div
-                                    className="relative flex justify-between font-poppins items-start bg-[#313338] p-4 rounded-md shadow-lg z-10">
+                                    className="relative flex justify-between font-poppins items-start bg-[#313338] p-4 rounded-md shadow-lg z-10 translate-y-16">
                                     <div className="flex flex-col">
                                         <p className="text-blue-100 text-l mx-2 py-0.5">Website is:</p>
                                         <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-0.5">{result}</p>
