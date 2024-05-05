@@ -62,11 +62,13 @@ export default function HistoryPage() {
                             </thead>
                             <tbody className="divide-y divide-zinc-700">
                             {isLoading ? (
-                                <tr>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0 animate-pulse">???</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
-                                </tr>
+                                [...Array(5)].map((_, index) => (
+                                    <tr key={index}>
+                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0 animate-pulse">???</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
+                                    </tr>
+                                ))
                             ) : (
                                 history.map(({date, result, url}, index) => (
                                     <tr key={index}>
