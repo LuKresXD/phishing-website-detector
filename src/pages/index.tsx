@@ -29,23 +29,27 @@ export default function Home() {
     }
 
     async function checkVirusTotal(checkUrl: string) {
-        setIsLoading(true);
-        const scanId = await sendUrlToVirusTotal(checkUrl);
-        if (scanId) {
-            const analysisResult = await waitForAnalysisCompletion(scanId);
-            let score = Math.max(Number((100 - (analysisResult.data.attributes.stats.malicious * 5 + analysisResult.data.attributes.stats.suspicious * 3) / 92 * 100).toFixed(1)), 0.1);
-            setSafetyScore(score);
-            setScannedUrl(analysisResult.meta.url_info.url);
-            if (score < 50) {
-                setResult('Dangerous');
-            } else if (score < 80) {
-                setResult('Moderate');
-            } else {
-                setResult('Safe');
-            }
-        }
-        setIsLoading(false);
+    setIsLoading(true);
+    const scanId = await sendUrlToVirusTotal(checkUrl);
+    if (scanId) {
+        const analysisResult = await waitForAnalysisCompletion(scanId);
+        let score = Math.max(Number((100 - (analysisResult.data.attributes.stats.malicious * 5 + analysisResult.data.attributes.stats.suspicious * 3) / 92 * 100).toFixed(1)), 0.1);
+        setSafetyScore(score);
+        setScannedUrl(analysisResult.meta.url_info.url);
+        const resultText = score < 50 ? 'Dangerous' : score < 80 ? 'Moderate' : 'Safe';
+        setResult(resultText);
+
+        await axios.post('/api/saveScan', {
+            url: checkUrl,
+            result: resultText,
+            safetyScore: score
+        });
+
+        setUrl('');
     }
+    setIsLoading(false);
+}
+
 
     async function waitForAnalysisCompletion(scanId: string) {
         const analysisResult = await getUrlAnalysis(scanId);

@@ -37,7 +37,7 @@ export default function HistoryPage() {
             <main className='flex h-screen flex-col justify-center pattern-grid-lg text-primary overflow-x-hidden'>
                 <div className='max-w-5xl w-full mx-auto'>
                     <h1 className='text-white font-bold sm:text-6xl text-4xl font-leaguespartan text-center'>
-                        History 🚧
+                        History 📜
                     </h1>
                     <table className="min-w-full divide-y divide-zinc-800 mt-8">
                         <thead>
@@ -53,16 +53,16 @@ export default function HistoryPage() {
                                     <td className="text-center py-4 text-sm text-blue-100">Loading...</td>
                                 </tr>
                             ) : history.length > 0 ? (
-                                history.map((item, index) => (
+                                history.map(({date, result, url}, index) => (
                                     <tr key={index}>
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{item.url}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{new Date(item.date).toLocaleDateString()}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{item.result}</td>
+                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{url}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{new Date(date).toLocaleDateString()}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{result}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="3" className="text-center py-4 text-sm text-blue-100">No history found</td>
+                                    <td className="text-center py-4 text-sm text-blue-100">No history found</td>
                                 </tr>
                             )}
                         </tbody>
