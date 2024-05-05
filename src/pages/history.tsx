@@ -7,21 +7,35 @@ import axios from 'axios';
 export default function HistoryPage() {
     const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalScans, setTotalScans] = useState(0);
 
     useEffect(() => {
-        async function fetchHistory() {
-            try {
-                const { data } = await axios.get('/api/history');
-                setHistory(data);
-                setIsLoading(false);
-            } catch (error) {
-                console.error('Failed to fetch history:', error);
-                setIsLoading(false);
-            }
-        }
+        fetchHistory({page: currentPage});
+    }, [currentPage]);
 
-        fetchHistory();
-    }, []);
+    async function fetchHistory({page}: { page: any }) {
+        setIsLoading(true);
+        try {
+            const { data } = await axios.get(`/api/history?page=${page}&limit=5`);
+            setHistory(data.scans);
+            setTotalPages(data.totalPages);
+            setTotalScans(data.totalScans);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Failed to fetch history:', error);
+            setIsLoading(false);
+        }
+    }
+
+    function handlePrevious() {
+        setCurrentPage(prev => Math.max(prev - 1, 1));
+    }
+
+    function handleNext() {
+        setCurrentPage(prev => (prev < totalPages ? prev + 1 : prev));
+    }
 
     return (
         <>
@@ -64,6 +78,25 @@ export default function HistoryPage() {
                                 <tr>
                                     <td className="text-center py-4 text-sm text-blue-100">No history found</td>
                                 </tr>
+                            )}
+                            {isLoading ? <p>Loading...</p> : (
+                                <nav className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
+                                    <div className="flex flex-1 items-center gap-3">
+                                        <button onClick={handlePrevious} className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="fill-white h-6 w-6 mx-auto" viewBox="0 0 16 16"><path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"></path></svg>
+                                        </button>
+                                        <button onClick={handleNext} className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
+                                            {<svg xmlns="http://www.w3.org/2000/svg" className="fill-white h-6 w-6 mx-auto"
+                                                  viewBox="0 0 16 16">
+                                                <path
+                                                    d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"></path>
+                                            </svg>}
+                                        </button>
+                                        <p className="text-sm text-blue-100 font-poppins">
+                                            Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, totalScans)} of {totalScans} scans
+                                        </p>
+                                    </div>
+                                </nav>
                             )}
                         </tbody>
                     </table>
