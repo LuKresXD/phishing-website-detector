@@ -135,7 +135,7 @@ export default function Home() {
                                         <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-0.5">{result}</p>
                                         <p className="text-blue-500 font-bold text-3xl font-poppins mx-2 py-1.5">{"ㅤ"}</p>
                                         <div className="text-blue-100/50 text-l font-poppins mx-2 py-1">
-                                            {scannedUrl.length > 50 ? `${scannedUrl.substring(0, 47)}...` : scannedUrl}
+                                            {scannedUrl.length > 25 ? `${scannedUrl.substring(0, 25)}...` : scannedUrl}
                                         </div>
                                     </div>
                                     <div style={{width: 150, height: 150}}>
