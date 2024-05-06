@@ -1,11 +1,12 @@
 import Head from 'next/head';
-import { Fragment, useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Navbar from "@/components/Navbar";
 import { useInView } from 'react-intersection-observer';
 import { motion } from "framer-motion";
+import Typewriter from 'typewriter-effect';
 
 
 
@@ -117,7 +118,16 @@ export default function Home() {
                             <span className="text-blue-500">Phishing</span> <span className="text-blue-100">Website Detector 🕵🏻‍♂️</span>
                         </h1>
                         <p className='text-blue-100 text-lg text-center mt-4 font-poppins'>
-                            Enter a URL below to check if the website is safe.
+                            {inView &&
+                                <Typewriter
+                                    options={{
+                                        delay: 30,
+                                        strings: ["Enter a URL below to check if the website is safe."],
+                                        loop: false,
+                                        autoStart: true,
+                                        deleteSpeed: 604800000,
+                                    }}
+                                />}
                         </p>
                         <div className='w-full mx-auto pt-8 flex flex-col items-center'>
                             <div className="flex items-center w-full mb-4">
