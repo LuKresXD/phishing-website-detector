@@ -9,7 +9,8 @@ export default async function handler(req, res) {
         const { count, rows } = await Scan.findAndCountAll({
             limit: limit,
             offset: offset,
-            order: [['date', 'DESC']]
+            order: [['date', 'DESC']],
+            attributes: ['url', 'result', 'date', 'safetyScore'] // Include safetyScore
         });
         res.status(200).json({
             totalPages: Math.ceil(count / limit),

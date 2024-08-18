@@ -13,6 +13,11 @@ const Scan = sequelize.define('Scan', {
     date: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+    },
+    safetyScore: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        defaultValue: 0
     }
 });
 

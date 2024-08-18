@@ -30,6 +30,26 @@ export default function HistoryPage() {
         }
     }
 
+    async function handleExport() {
+        try {
+            const response = await axios.get('/api/exportHistory', {
+                responseType: 'blob', // Important for handling the binary data
+            });
+            const blob = new Blob([response.data], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'scan_history.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Failed to export history:', error);
+            // You might want to show an error message to the user here
+        }
+    }
+
     function handlePrevious() {
         setCurrentPage(prev => Math.max(prev - 1, 1));
     }
@@ -42,6 +62,12 @@ export default function HistoryPage() {
         threshold: 0.1,
         triggerOnce: true,
     });
+
+    const getSafetyScoreColor = (score: number) => {
+        if (score >= 80) return 'text-green-500';
+        if (score >= 50) return 'text-yellow-500';
+        return 'text-red-500';
+    };
 
     return (
         <>
@@ -80,6 +106,10 @@ export default function HistoryPage() {
                                     <th scope="col"
                                         className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Result
                                     </th>
+                                    <th scope="col"
+                                        className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Safety
+                                        Score
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody className="divide-y divide-zinc-700">
@@ -89,19 +119,22 @@ export default function HistoryPage() {
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0 animate-pulse">???</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
                                         </tr>
                                     ))
                                 ) : (
-                                    history.map(({date, result, url}, index) => (
+                                    history.map(({date, result, url, safetyScore}, index) => (
                                         <tr key={index}>
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{(url as string).length > 25 ? `${(url as string).substring(0, 25)}...` : url}</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{new Date(date).toLocaleString()}</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{result}</td>
+                                            <td className={`whitespace-nowrap px-3 py-4 text-sm font-poppins ${getSafetyScoreColor(safetyScore)}`}>
+                                                {safetyScore !== null ? `${safetyScore.toFixed(1)}%` : 'N/A'}
+                                            </td>
                                         </tr>
                                     ))
                                 )}
                                 </tbody>
-
                             </table>
                             <nav
                                 className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
@@ -125,6 +158,14 @@ export default function HistoryPage() {
                                     <p className="text-sm text-blue-100 font-poppins">
                                         Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, totalScans)} of {totalScans} scans
                                     </p>
+                                </div>
+                                <div className="flex justify-end mb-4">
+                                    <button
+                                        onClick={handleExport}
+                                        className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-4 py-2 text-sm font-semibold text-blue-100"
+                                    >
+                                        Export CSV
+                                    </button>
                                 </div>
                             </nav>
                         </div>

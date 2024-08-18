@@ -63,6 +63,12 @@ export default function HistoryPage() {
         triggerOnce: true,
     });
 
+    const getSafetyScoreColor = (score: number) => {
+        if (score >= 80) return 'text-green-500';
+        if (score >= 50) return 'text-yellow-500';
+        return 'text-red-500';
+    };
+
     return (
         <>
             <Head>
@@ -100,6 +106,10 @@ export default function HistoryPage() {
                                     <th scope="col"
                                         className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Result
                                     </th>
+                                    <th scope="col"
+                                        className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Safety
+                                        Score
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody className="divide-y divide-zinc-700">
@@ -109,19 +119,22 @@ export default function HistoryPage() {
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0 animate-pulse">???</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">???</td>
                                         </tr>
                                     ))
                                 ) : (
-                                    history.map(({date, result, url}, index) => (
+                                    history.map(({date, result, url, safetyScore}, index) => (
                                         <tr key={index}>
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{(url as string).length > 25 ? `${(url as string).substring(0, 25)}...` : url}</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{new Date(date).toLocaleString()}</td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{result}</td>
+                                            <td className={`whitespace-nowrap px-3 py-4 text-sm font-poppins ${getSafetyScoreColor(safetyScore)}`}>
+                                                {safetyScore !== null ? `${safetyScore.toFixed(1)}%` : 'N/A'}
+                                            </td>
                                         </tr>
                                     ))
                                 )}
                                 </tbody>
-
                             </table>
                             <nav
                                 className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
