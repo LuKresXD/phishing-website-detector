@@ -1,0 +1,141 @@
+.
+├── .DS_Store
+├── .env.local
+├── .eslintrc.json
+├── .gitignore
+├── .idea
+│   ├── .gitignore
+│   ├── .name
+│   ├── aws.xml
+│   ├── material_theme_project_new.xml
+│   ├── modules.xml
+│   ├── phishing-website-detector.iml
+│   ├── vcs.xml
+│   └── workspace.xml
+├── .next
+│   ├── build-manifest.json
+│   ├── cache
+│   │   ├── swc
+│   │   │   └── plugins
+│   │   │       ├── v7_macos_aarch64_0.104.41
+│   │   │       └── v7_macos_aarch64_0.106.15
+│   │   └── webpack
+│   │       ├── client-development
+│   │       │   ├── 0.pack.gz
+│   │       │   ├── 1.pack.gz
+│   │       │   ├── 10.pack.gz
+│   │       │   ├── 11.pack.gz
+│   │       │   ├── 12.pack.gz
+│   │       │   ├── 13.pack.gz
+│   │       │   ├── 14.pack.gz
+│   │       │   ├── 15.pack.gz
+│   │       │   ├── 16.pack.gz
+│   │       │   ├── 2.pack.gz
+│   │       │   ├── 3.pack.gz
+│   │       │   ├── 4.pack.gz
+│   │       │   ├── 5.pack.gz
+│   │       │   ├── 6.pack.gz
+│   │       │   ├── 7.pack.gz
+│   │       │   ├── 8.pack.gz
+│   │       │   ├── 9.pack.gz
+│   │       │   ├── index.pack.gz
+│   │       │   └── index.pack.gz.old
+│   │       ├── client-development-fallback
+│   │       │   ├── 0.pack.gz
+│   │       │   ├── 1.pack.gz
+│   │       │   └── index.pack.gz.old
+│   │       └── server-development
+│   │           ├── 0.pack.gz
+│   │           ├── 1.pack.gz
+│   │           ├── 10.pack.gz
+│   │           ├── 2.pack.gz
+│   │           ├── 3.pack.gz
+│   │           ├── 4.pack.gz
+│   │           ├── 5.pack.gz
+│   │           ├── 6.pack.gz
+│   │           ├── 7.pack.gz
+│   │           ├── 8.pack.gz
+│   │           ├── 9.pack.gz
+│   │           ├── index.pack.gz
+│   │           └── index.pack.gz.old
+│   ├── package.json
+│   ├── react-loadable-manifest.json
+│   ├── server
+│   │   ├── middleware-build-manifest.js
+│   │   ├── middleware-manifest.json
+│   │   ├── middleware-react-loadable-manifest.js
+│   │   ├── next-font-manifest.js
+│   │   ├── next-font-manifest.json
+│   │   ├── pages
+│   │   │   ├── _app.js
+│   │   │   ├── _document.js
+│   │   │   ├── _error.js
+│   │   │   ├── api
+│   │   │   │   └── history.js
+│   │   │   ├── history.js
+│   │   │   └── index.js
+│   │   ├── pages-manifest.json
+│   │   ├── vendor-chunks
+│   │   │   ├── @swc.js
+│   │   │   ├── next.js
+│   │   │   └── react-circular-progressbar.js
+│   │   ├── webpack-api-runtime.js
+│   │   └── webpack-runtime.js
+│   ├── static
+│   │   ├── chunks
+│   │   │   ├── main.js
+│   │   │   ├── pages
+│   │   │   │   ├── _app.js
+│   │   │   │   ├── _error.js
+│   │   │   │   ├── history.js
+│   │   │   │   └── index.js
+│   │   │   ├── polyfills.js
+│   │   │   ├── react-refresh.js
+│   │   │   └── webpack.js
+│   │   ├── development
+│   │   │   ├── _buildManifest.js
+│   │   │   └── _ssgManifest.js
+│   │   └── webpack
+│   │       ├── 20c889d724c45017.webpack.hot-update.json
+│   │       ├── 633457081244afec._.hot-update.json
+│   │       └── webpack.20c889d724c45017.hot-update.js
+│   └── trace
+├── README.md
+├── database.sqlite
+├── lib
+│   └── db.js
+├── models
+│   └── Scan.js
+├── next-env.d.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── project_structure.txt
+├── public
+│   ├── detective.ico
+│   ├── favicon.ico
+│   └── me.png
+├── scripts
+│   └── init-db.js
+├── src
+│   ├── .DS_Store
+│   ├── components
+│   │   └── Navbar.tsx
+│   ├── pages
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   ├── api
+│   │   │   ├── history.js
+│   │   │   ├── proxy.js
+│   │   │   └── saveScan.js
+│   │   ├── history.tsx
+│   │   └── index.tsx
+│   └── styles
+│       └── globals.css
+├── tailwind.config.ts
+├── tsconfig.json
+└── typings
+    └── index.d.ts
+
+31 directories, 108 files

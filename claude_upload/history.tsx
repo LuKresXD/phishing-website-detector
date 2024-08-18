@@ -30,26 +30,6 @@ export default function HistoryPage() {
         }
     }
 
-    async function handleExport() {
-        try {
-            const response = await axios.get('/api/exportHistory', {
-                responseType: 'blob', // Important for handling the binary data
-            });
-            const blob = new Blob([response.data], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'scan_history.csv';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('Failed to export history:', error);
-            // You might want to show an error message to the user here
-        }
-    }
-
     function handlePrevious() {
         setCurrentPage(prev => Math.max(prev - 1, 1));
     }
@@ -145,14 +125,6 @@ export default function HistoryPage() {
                                     <p className="text-sm text-blue-100 font-poppins">
                                         Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, totalScans)} of {totalScans} scans
                                     </p>
-                                </div>
-                                <div className="flex justify-end mb-4">
-                                    <button
-                                        onClick={handleExport}
-                                        className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-4 py-2 text-sm font-semibold text-blue-100"
-                                    >
-                                        Export CSV
-                                    </button>
                                 </div>
                             </nav>
                         </div>

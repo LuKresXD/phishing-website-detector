@@ -7,7 +7,7 @@ export default async function handler(req, res) {
             await Scan.create({
                 url,
                 result,
-                safetyScore: safetyScore || 0,
+                safetyScore,
                 date: new Date()
             });
             res.status(201).send({ message: 'Scan saved' });
