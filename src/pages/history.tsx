@@ -101,14 +101,6 @@ export default function HistoryPage() {
                             <h1 className='text-white font-bold sm:text-6xl text-4xl font-leaguespartan text-center'>
                                 History 📜
                             </h1>
-                            <div className="flex justify-end mb-4">
-                                <button
-                                    onClick={handleExport}
-                                    className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-4 py-2 text-sm font-semibold text-blue-100"
-                                >
-                                    Export CSV
-                                </button>
-                            </div>
                             <table className="min-w-full divide-y divide-zinc-800 mt-8">
                                 <thead>
                                 <tr>
@@ -142,7 +134,8 @@ export default function HistoryPage() {
                                 )}
                                 </tbody>
                             </table>
-                            <nav className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
+                            <nav
+                                className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
                                 <div className="flex flex-1 items-center gap-3">
                                     <button onClick={handlePrevious}
                                             className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
@@ -163,6 +156,14 @@ export default function HistoryPage() {
                                     <p className="text-sm text-blue-100 font-poppins">
                                         Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, totalScans)} of {totalScans} scans
                                     </p>
+                                </div>
+                                <div className="flex justify-end mb-4">
+                                    <button
+                                        onClick={handleExport}
+                                        className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-4 py-2 text-sm font-semibold text-blue-100"
+                                    >
+                                        Export CSV
+                                    </button>
                                 </div>
                             </nav>
                         </div>
