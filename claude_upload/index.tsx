@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import { useInView } from 'react-intersection-observer';
 import { motion } from "framer-motion";
 import Typewriter from 'typewriter-effect';
+import { addScan } from '@/utils/localStorageUtil';
 
 
 
@@ -33,26 +34,27 @@ export default function Home() {
     }
 
     async function checkVirusTotal(checkUrl: string) {
-    setIsLoading(true);
-    const scanId = await sendUrlToVirusTotal(checkUrl);
-    if (scanId) {
-        const analysisResult = await waitForAnalysisCompletion(scanId);
-        let score = Math.max(Number((100 - (analysisResult.data.attributes.stats.malicious * 5 + analysisResult.data.attributes.stats.suspicious * 3) / 92 * 100).toFixed(1)), 0.1);
-        setSafetyScore(score);
-        setScannedUrl(analysisResult.meta.url_info.url);
-        const resultText = score < 50 ? 'Dangerous' : score < 80 ? 'Moderate' : 'Safe';
-        setResult(resultText);
+        setIsLoading(true);
+        const scanId = await sendUrlToVirusTotal(checkUrl);
+        if (scanId) {
+            const analysisResult = await waitForAnalysisCompletion(scanId);
+            let score = Math.max(Number((100 - (analysisResult.data.attributes.stats.malicious * 5 + analysisResult.data.attributes.stats.suspicious * 3) / 92 * 100).toFixed(1)), 0.1);
+            setSafetyScore(score);
+            setScannedUrl(analysisResult.meta.url_info.url);
+            const resultText = score < 50 ? 'Dangerous' : score < 80 ? 'Moderate' : 'Safe';
+            setResult(resultText);
 
-        await axios.post('/api/saveScan', {
-            url: checkUrl,
-            result: resultText,
-            safetyScore: score
-        });
+            addScan({
+                url: checkUrl,
+                result: resultText,
+                safetyScore: score,
+                date: new Date().toISOString()
+            });
 
-        setUrl('');
+            setUrl('');
+        }
+        setIsLoading(false);
     }
-    setIsLoading(false);
-}
 
 
     async function waitForAnalysisCompletion(scanId: string) {

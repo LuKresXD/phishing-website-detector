@@ -7,6 +7,8 @@
 │   ├── .gitignore
 │   ├── .name
 │   ├── aws.xml
+│   ├── inspectionProfiles
+│   │   └── Project_Default.xml
 │   ├── material_theme_project_new.xml
 │   ├── modules.xml
 │   ├── phishing-website-detector.iml
@@ -15,6 +17,9 @@
 ├── .next
 │   ├── build-manifest.json
 │   ├── cache
+│   │   ├── .tsbuildinfo
+│   │   ├── eslint
+│   │   │   └── .cache_1fxws5l
 │   │   ├── swc
 │   │   │   └── plugins
 │   │   │       ├── v7_macos_aarch64_0.104.41
@@ -43,21 +48,25 @@
 │   │       ├── client-development-fallback
 │   │       │   ├── 0.pack.gz
 │   │       │   ├── 1.pack.gz
+│   │       │   ├── index.pack.gz
 │   │       │   └── index.pack.gz.old
-│   │       └── server-development
-│   │           ├── 0.pack.gz
-│   │           ├── 1.pack.gz
-│   │           ├── 10.pack.gz
-│   │           ├── 2.pack.gz
-│   │           ├── 3.pack.gz
-│   │           ├── 4.pack.gz
-│   │           ├── 5.pack.gz
-│   │           ├── 6.pack.gz
-│   │           ├── 7.pack.gz
-│   │           ├── 8.pack.gz
-│   │           ├── 9.pack.gz
-│   │           ├── index.pack.gz
-│   │           └── index.pack.gz.old
+│   │       ├── server-development
+│   │       │   ├── 0.pack.gz
+│   │       │   ├── 1.pack.gz
+│   │       │   ├── 10.pack.gz
+│   │       │   ├── 2.pack.gz
+│   │       │   ├── 3.pack.gz
+│   │       │   ├── 4.pack.gz
+│   │       │   ├── 5.pack.gz
+│   │       │   ├── 6.pack.gz
+│   │       │   ├── 7.pack.gz
+│   │       │   ├── 8.pack.gz
+│   │       │   ├── 9.pack.gz
+│   │       │   ├── index.pack.gz
+│   │       │   └── index.pack.gz.old
+│   │       └── server-production
+│   │           ├── 0.pack
+│   │           └── index.pack
 │   ├── package.json
 │   ├── react-loadable-manifest.json
 │   ├── server
@@ -71,7 +80,9 @@
 │   │   │   ├── _document.js
 │   │   │   ├── _error.js
 │   │   │   ├── api
-│   │   │   │   └── history.js
+│   │   │   │   ├── history.js
+│   │   │   │   ├── proxy.js
+│   │   │   │   └── saveScan.js
 │   │   │   ├── history.js
 │   │   │   └── index.js
 │   │   ├── pages-manifest.json
@@ -96,11 +107,66 @@
 │   │   │   ├── _buildManifest.js
 │   │   │   └── _ssgManifest.js
 │   │   └── webpack
-│   │       ├── 20c889d724c45017.webpack.hot-update.json
+│   │       ├── 219c1fc5b2d65b85.webpack.hot-update.json
+│   │       ├── 2dab2bcf649d3980.webpack.hot-update.json
+│   │       ├── 32e18afb2349cf20.webpack.hot-update.json
 │   │       ├── 633457081244afec._.hot-update.json
-│   │       └── webpack.20c889d724c45017.hot-update.js
+│   │       ├── 636ce8b28c5a40a9.webpack.hot-update.json
+│   │       ├── 84813b715bbb3e4a.webpack.hot-update.json
+│   │       ├── 8e675c656dce536f.webpack.hot-update.json
+│   │       ├── b7495ce917a3e424.webpack.hot-update.json
+│   │       ├── bec23abb170a4a34.webpack.hot-update.json
+│   │       ├── d81ef1e5d0910186.webpack.hot-update.json
+│   │       ├── ebfc16f2772f9907.webpack.hot-update.json
+│   │       ├── pages
+│   │       │   ├── history.219c1fc5b2d65b85.hot-update.js
+│   │       │   ├── history.2dab2bcf649d3980.hot-update.js
+│   │       │   ├── history.b7495ce917a3e424.hot-update.js
+│   │       │   ├── history.bec23abb170a4a34.hot-update.js
+│   │       │   ├── history.d81ef1e5d0910186.hot-update.js
+│   │       │   ├── index.219c1fc5b2d65b85.hot-update.js
+│   │       │   ├── index.32e18afb2349cf20.hot-update.js
+│   │       │   ├── index.84813b715bbb3e4a.hot-update.js
+│   │       │   ├── index.8e675c656dce536f.hot-update.js
+│   │       │   └── index.ebfc16f2772f9907.hot-update.js
+│   │       ├── webpack.219c1fc5b2d65b85.hot-update.js
+│   │       ├── webpack.2dab2bcf649d3980.hot-update.js
+│   │       ├── webpack.32e18afb2349cf20.hot-update.js
+│   │       ├── webpack.636ce8b28c5a40a9.hot-update.js
+│   │       ├── webpack.84813b715bbb3e4a.hot-update.js
+│   │       ├── webpack.8e675c656dce536f.hot-update.js
+│   │       ├── webpack.b7495ce917a3e424.hot-update.js
+│   │       ├── webpack.bec23abb170a4a34.hot-update.js
+│   │       ├── webpack.d81ef1e5d0910186.hot-update.js
+│   │       └── webpack.ebfc16f2772f9907.hot-update.js
 │   └── trace
 ├── README.md
+├── claude_upload
+│   ├── .eslintrc.json
+│   ├── Navbar.tsx
+│   ├── README.md
+│   ├── Scan.js
+│   ├── _app.tsx
+│   ├── _document.tsx
+│   ├── db.js
+│   ├── exportHistory.js
+│   ├── globals.css
+│   ├── history.js
+│   ├── history.tsx
+│   ├── index.d.ts
+│   ├── index.tsx
+│   ├── init-db.js
+│   ├── localStorageUtil.ts
+│   ├── next-env.d.ts
+│   ├── next.config.mjs
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── project_structure.txt
+│   ├── proxy.js
+│   ├── saveScan.js
+│   ├── server.env.local
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
 ├── database.sqlite
 ├── lib
 │   └── db.js
@@ -126,16 +192,19 @@
 │   │   ├── _app.tsx
 │   │   ├── _document.tsx
 │   │   ├── api
+│   │   │   ├── exportHistory.js
 │   │   │   ├── history.js
 │   │   │   ├── proxy.js
 │   │   │   └── saveScan.js
 │   │   ├── history.tsx
 │   │   └── index.tsx
-│   └── styles
-│       └── globals.css
+│   ├── styles
+│   │   └── globals.css
+│   └── utils
+│       └── localStorageUtil.ts
 ├── tailwind.config.ts
 ├── tsconfig.json
 └── typings
     └── index.d.ts
 
-31 directories, 108 files
+37 directories, 171 files

@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Navbar from "@/components/Navbar";
-import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
 import { motion } from "framer-motion";
 
@@ -11,6 +10,19 @@ interface Scan {
     url: string;
     safetyScore: number | null;
 }
+
+const ITEMS_PER_PAGE = 5;
+const STORAGE_KEY = 'scanHistory';
+
+// localStorage utility functions
+const getScans = (): Scan[] => {
+    const scans = localStorage.getItem(STORAGE_KEY);
+    return scans ? JSON.parse(scans) : [];
+};
+
+const saveScans = (scans: Scan[]): void => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(scans));
+};
 
 export default function HistoryPage() {
     const [history, setHistory] = useState<Scan[]>([]);
@@ -28,18 +40,17 @@ export default function HistoryPage() {
         fetchHistory(currentPage);
     }, [currentPage]);
 
-    async function fetchHistory(page: number) {
+    function fetchHistory(page: number) {
         setIsLoading(true);
-        try {
-            const { data } = await axios.get(`/api/history?page=${page}&limit=5`);
-            setHistory(data.scans);
-            setTotalPages(data.totalPages);
-            setTotalScans(data.totalScans);
-            setIsLoading(false);
-        } catch (error) {
-            console.error('Failed to fetch history:', error);
-            setIsLoading(false);
-        }
+        const allScans = getScans();
+        const startIndex = (page - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        const paginatedScans = allScans.slice(startIndex, endIndex);
+
+        setHistory(paginatedScans);
+        setTotalPages(Math.ceil(allScans.length / ITEMS_PER_PAGE));
+        setTotalScans(allScans.length);
+        setIsLoading(false);
     }
 
     function handlePrevious() {
@@ -57,23 +68,27 @@ export default function HistoryPage() {
         return 'text-red-500';
     };
 
-    async function handleExport() {
-        try {
-            const response = await axios.get('/api/exportHistory', {
-                responseType: 'blob',
-            });
-            const blob = new Blob([response.data], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'scan_history.csv';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('Failed to export history:', error);
-        }
+    function handleExport() {
+        const allScans = getScans();
+        const csvContent = [
+            ['URL', 'Date', 'Result', 'Safety Score'],
+            ...allScans.map(scan => [
+                scan.url,
+                new Date(scan.date).toLocaleString(),
+                scan.result,
+                scan.safetyScore !== null ? `${scan.safetyScore.toFixed(1)}%` : 'N/A'
+            ])
+        ].map(row => row.join(',')).join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'scan_history.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     return (
@@ -154,7 +169,7 @@ export default function HistoryPage() {
                                         </svg>
                                     </button>
                                     <p className="text-sm text-blue-100 font-poppins">
-                                        Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, totalScans)} of {totalScans} scans
+                                        Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, totalScans)} of {totalScans} scans
                                     </p>
                                 </div>
                                 <div className="flex justify-end mb-4">
