@@ -117,7 +117,7 @@ export default function HistoryPage() {
                             {totalScans === 0 ? (
                                 <div className="flex flex-col items-center justify-center mt-12 text-center">
                                     <DatabaseIcon className="w-24 h-24 text-blue-500 mb-6" />
-                                    <h2 className="text-4xl font-bold text-blue-100 mb-4 font-leaguespartan">No downloads yet</h2>
+                                    <h2 className="text-4xl font-bold text-blue-100 mb-4 font-leaguespartan">No scans yet</h2>
                                     <p className="text-xl text-blue-300 max-w-lg font-poppins">
                                         Start scanning websites to build your history. Your scans will appear here.
                                     </p>
