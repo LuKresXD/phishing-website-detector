@@ -19,6 +19,7 @@ export default async function handler(req, res) {
       res.status(405).end(`Method ${req.method} Not Allowed`);
     }
   } catch (error) {
+    console.error('Proxy error:', error.response ? error.response.data : error.message);
     res.status(500).json({ error: error.message });
   }
 }

@@ -4,26 +4,9 @@ import Navbar from "@/components/Navbar";
 import { useInView } from 'react-intersection-observer';
 import { motion } from "framer-motion";
 import { DatabaseIcon } from 'lucide-react';
-
-interface Scan {
-    date: string;
-    result: string;
-    url: string;
-    safetyScore: number | null;
-}
+import { Scan, getScans } from '@/utils/localStorageUtil';
 
 const ITEMS_PER_PAGE = 5;
-const STORAGE_KEY = 'scanHistory';
-
-// localStorage utility functions
-const getScans = (): Scan[] => {
-    const scans = localStorage.getItem(STORAGE_KEY);
-    return scans ? JSON.parse(scans) : [];
-};
-
-const saveScans = (scans: Scan[]): void => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(scans));
-};
 
 export default function HistoryPage() {
     const [history, setHistory] = useState<Scan[]>([]);
@@ -62,22 +45,29 @@ export default function HistoryPage() {
         setCurrentPage(prev => (prev < totalPages ? prev + 1 : prev));
     }
 
-    const getSafetyScoreColor = (score: number | null) => {
-        if (score === null) return 'text-gray-500';
+    const getSafetyScoreColor = (score: number | null | undefined) => {
+        if (score === null || score === undefined) return 'text-gray-500';
         if (score >= 80) return 'text-green-500';
         if (score >= 50) return 'text-yellow-500';
         return 'text-red-500';
     };
 
+    const formatSafetyScore = (score: number | null | undefined) => {
+        if (score === null || score === undefined) return 'N/A';
+        return `${score.toFixed(1)}%`;
+    };
+
     function handleExport() {
         const allScans = getScans();
         const csvContent = [
-            ['URL', 'Date', 'Result', 'Safety Score'],
+            ['URL', 'Date', 'VirusTotal Result', 'Custom Result', 'VirusTotal Safety Score', 'Custom Safety Score'],
             ...allScans.map(scan => [
                 scan.url,
                 new Date(scan.date).toLocaleString(),
-                scan.result,
-                scan.safetyScore !== null ? `${scan.safetyScore.toFixed(1)}%` : 'N/A'
+                scan.virusTotalResult,
+                scan.customResult,
+                scan.virusTotalSafetyScore !== null ? `${scan.virusTotalSafetyScore.toFixed(1)}%` : 'N/A',
+                scan.customSafetyScore !== null ? `${scan.customSafetyScore.toFixed(1)}%` : 'N/A'
             ])
         ].map(row => row.join(',')).join('\n');
 
@@ -95,7 +85,7 @@ export default function HistoryPage() {
     return (
         <>
             <Head>
-                <title>History 📜🔍‍👀</title>
+                <title>History 📜🔍‍💻</title>
                 <link rel="stylesheet" href="https://unpkg.com/pattern.css@1.0.0/dist/pattern.min.css"/>
                 <meta name="description" content="View the history of scanned websites"/>
                 <meta property='theme-color' content='#17171a'/>
@@ -129,28 +119,36 @@ export default function HistoryPage() {
                                         <tr>
                                             <th scope="col" className="font-poppins py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-blue-100 sm:pl-0">URL</th>
                                             <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Date</th>
-                                            <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Result</th>
-                                            <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Safety Score</th>
+                                            <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">VirusTotal Result</th>
+                                            <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Custom Result</th>
+                                            <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">VirusTotal Score</th>
+                                            <th scope="col" className="font-poppins px-3 py-3.5 text-left text-sm font-semibold text-blue-100">Custom Score</th>
                                         </tr>
                                         </thead>
                                         <tbody className="divide-y divide-zinc-700">
                                         {isLoading ? (
                                             [...Array(5)].map((_, index) => (
                                                 <tr key={index}>
-                                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0 animate-pulse">????</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">????</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">????</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">????</td>
+                                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0 animate-pulse">?????</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">?????</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">?????</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">?????</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">?????</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins animate-pulse">?????</td>
                                                 </tr>
                                             ))
                                         ) : (
-                                            history.map(({date, result, url, safetyScore}, index) => (
+                                            history.map(({date, virusTotalResult, customResult, url, virusTotalSafetyScore, customSafetyScore}, index) => (
                                                 <tr key={index}>
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{url.length > 25 ? `${url.substring(0, 25)}...` : url}</td>
                                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{new Date(date).toLocaleString()}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{result}</td>
-                                                    <td className={`whitespace-nowrap px-3 py-4 text-sm font-poppins ${getSafetyScoreColor(safetyScore)}`}>
-                                                        {safetyScore !== null ? `${safetyScore.toFixed(1)}%` : 'N/A'}
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{virusTotalResult}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{customResult}</td>
+                                                    <td className={`whitespace-nowrap px-3 py-4 text-sm font-poppins ${getSafetyScoreColor(virusTotalSafetyScore)}`}>
+                                                        {formatSafetyScore(virusTotalSafetyScore)}
+                                                    </td>
+                                                    <td className={`whitespace-nowrap px-3 py-4 text-sm font-poppins ${getSafetyScoreColor(customSafetyScore)}`}>
+                                                        {formatSafetyScore(customSafetyScore)}
                                                     </td>
                                                 </tr>
                                             ))
