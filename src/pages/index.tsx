@@ -91,8 +91,8 @@ export default function Home() {
             console.error('Error during URL check:', error);
             setVirusTotalResult('Error');
             setCustomResult('Error');
-            setVirusTotalSafetyScore(0);
-            setCustomSafetyScore(0);
+            setVirusTotalSafetyScore(null);
+            setCustomSafetyScore(null);
         } finally {
             setIsLoading(false);
         }
@@ -100,7 +100,7 @@ export default function Home() {
 
     async function sendUrlToVirusTotal(urlToCheck: string) {
         try {
-            const response = await axios.post('/api/proxy', {url: urlToCheck});
+            const response = await axios.post('/api/proxy', { url: urlToCheck });
             if (response.data && response.data.data && response.data.data.id) {
                 return response.data.data.id;
             } else {
@@ -113,13 +113,24 @@ export default function Home() {
     }
 
     async function waitForAnalysisCompletion(analysisId: string) {
-        try {
-            const response = await axios.get(`/api/proxy?id=${analysisId}`);
-            return response.data;
-        } catch (error) {
-            console.error('Error getting URL analysis from proxy:', error);
-            throw new Error('Failed to get analysis results');
+        const maxAttempts = 10;
+        const delayBetweenAttempts = 2000; // 2 seconds
+
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            try {
+                const response = await axios.get(`/api/proxy?id=${analysisId}`);
+                if (response.data.data.attributes.status === 'completed') {
+                    return response.data;
+                }
+            } catch (error) {
+                console.error('Error getting URL analysis from proxy:', error);
+            }
+
+            // Wait before the next attempt
+            await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts));
         }
+
+        throw new Error('Analysis did not complete in the expected time');
     }
 
     async function getUrlAnalysis(analysisId: string) {
