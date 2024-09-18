@@ -36,7 +36,6 @@ export default function Home() {
                 console.error('Error during URL check:', error);
                 setVirusTotalResult('Error');
                 setCustomResult('Error');
-                alert(`An error occurred: ${error.message}`);
             }
             setUrl('');
         }
@@ -92,8 +91,8 @@ export default function Home() {
             console.error('Error during URL check:', error);
             setVirusTotalResult('Error');
             setCustomResult('Error');
-            setVirusTotalSafetyScore(null);
-            setCustomSafetyScore(null);
+            setVirusTotalSafetyScore(0);
+            setCustomSafetyScore(0);
         } finally {
             setIsLoading(false);
         }
