@@ -9,8 +9,6 @@ import { motion } from "framer-motion";
 import Typewriter from 'typewriter-effect';
 import { addScan } from '@/utils/localStorageUtil';
 
-
-
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const [url, setUrl] = useState('google.com');
@@ -43,20 +41,20 @@ export default function Home() {
     }
 
     async function checkUrl(checkUrl: string) {
+        let vtResult = 'Unknown';
+        let vtScore = 0;
+        let customScore = 0;
+        let customResult = 'Unknown';
+
         try {
             setIsLoading(true);
             setVirusTotalResult('Checking...');
             setCustomResult('Checking...');
 
-            let vtResult = 'Error';
-            let vtScore = 0;
-            let customResult = 'Error';
-            let customScore = 0;
-
             // VirusTotal scan
-            const virusTotalScanId = await sendUrlToVirusTotal(checkUrl);
-            if (virusTotalScanId) {
-                const virusTotalAnalysisResult = await waitForAnalysisCompletion(virusTotalScanId);
+            const vtScanId = await sendUrlToVirusTotal(checkUrl);
+            if (vtScanId) {
+                const virusTotalAnalysisResult = await waitForAnalysisCompletion(vtScanId);
                 vtScore = Math.max(Number((100 - (virusTotalAnalysisResult.data.attributes.stats.malicious * 5 + virusTotalAnalysisResult.data.attributes.stats.suspicious * 3) / 92 * 100).toFixed(1)), 0.1);
                 vtResult = vtScore < 50 ? 'Dangerous' : vtScore < 80 ? 'Moderate' : 'Safe';
                 setVirusTotalSafetyScore(vtScore);
@@ -77,7 +75,7 @@ export default function Home() {
                 throw new Error('Invalid response from custom scan API');
             }
 
-            // Save scan to history only after both scans are complete
+            // Save scan to history
             addScan({
                 url: checkUrl,
                 virusTotalResult: vtResult,
@@ -91,8 +89,8 @@ export default function Home() {
             console.error('Error during URL check:', error);
             setVirusTotalResult('Error');
             setCustomResult('Error');
-            setVirusTotalSafetyScore(null);
-            setCustomSafetyScore(null);
+            setVirusTotalSafetyScore(0);
+            setCustomSafetyScore(0);
         } finally {
             setIsLoading(false);
         }
@@ -131,16 +129,6 @@ export default function Home() {
         }
 
         throw new Error('Analysis did not complete in the expected time');
-    }
-
-    async function getUrlAnalysis(analysisId: string) {
-        try {
-            const response = await axios.get(`/api/proxy?id=${analysisId}`);
-            return response.data;
-        } catch (error) {
-            console.error('Error getting URL analysis from proxy:', error);
-            return null;
-        }
     }
 
     const [ref, inView] = useInView({

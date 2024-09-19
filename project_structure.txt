@@ -125,9 +125,27 @@
 │   │   │   ├── _buildManifest.js
 │   │   │   └── _ssgManifest.js
 │   │   └── webpack
+│   │       ├── 00ee7d32a914d788.webpack.hot-update.json
 │   │       ├── 49a49a143b3028ce.webpack.hot-update.json
+│   │       ├── 4e6142d20b0cf596.webpack.hot-update.json
 │   │       ├── 633457081244afec._.hot-update.json
-│   │       └── webpack.49a49a143b3028ce.hot-update.js
+│   │       ├── 71ed1750f9c961c3.webpack.hot-update.json
+│   │       ├── 805a7cf293f570d2.webpack.hot-update.json
+│   │       ├── 8b2c95807826853d.webpack.hot-update.json
+│   │       ├── f4fc2cff2f245831.webpack.hot-update.json
+│   │       ├── pages
+│   │       │   ├── index.00ee7d32a914d788.hot-update.js
+│   │       │   ├── index.4e6142d20b0cf596.hot-update.js
+│   │       │   ├── index.805a7cf293f570d2.hot-update.js
+│   │       │   ├── index.8b2c95807826853d.hot-update.js
+│   │       │   └── index.f4fc2cff2f245831.hot-update.js
+│   │       ├── webpack.00ee7d32a914d788.hot-update.js
+│   │       ├── webpack.49a49a143b3028ce.hot-update.js
+│   │       ├── webpack.4e6142d20b0cf596.hot-update.js
+│   │       ├── webpack.71ed1750f9c961c3.hot-update.js
+│   │       ├── webpack.805a7cf293f570d2.hot-update.js
+│   │       ├── webpack.8b2c95807826853d.hot-update.js
+│   │       └── webpack.f4fc2cff2f245831.hot-update.js
 │   └── trace
 ├── README.md
 ├── claude_upload
@@ -148,6 +166,7 @@
 │   ├── init-db.js
 │   ├── localStorageUtil.ts
 │   ├── mlModel.js
+│   ├── ml_client.js
 │   ├── next-env.d.ts
 │   ├── next.config.mjs
 │   ├── package.json
@@ -209,4 +228,4 @@
 └── typings
     └── index.d.ts
 
-41 directories, 169 files
+42 directories, 187 files

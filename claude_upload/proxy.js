@@ -1,12 +1,14 @@
+// proxy.js
+
 import axios from 'axios';
 
-export default async function handler(req, res) {
-  const apiUrl = 'https://www.virustotal.com/api/v3';
-  const headers = {
-    'x-apikey': process.env.VIRUSTOTAL_API_KEY,
-    'Content-Type': 'application/x-www-form-urlencoded'
-  };
+const apiUrl = 'https://www.virustotal.com/api/v3';
+const headers = {
+  'x-apikey': process.env.VIRUSTOTAL_API_KEY,
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
 
+export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
       const response = await axios.post(`${apiUrl}/urls`, `url=${encodeURIComponent(req.body.url)}`, { headers });
