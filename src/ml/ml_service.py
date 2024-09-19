@@ -9,18 +9,14 @@ app = Flask(__name__)
 CORS(app)
 
 def simple_classifier(features):
-    # Convert features to 1 (good) and -1 (bad)
-    normalized_features = [1 if f > 0 else -1 for f in features]
-
-    # Calculate the score as a percentage of positive features
-    score = (sum(normalized_features) + len(normalized_features)) / (2 * len(normalized_features)) * 100
-
-    if score < 50:
-        return "Dangerous", score
-    elif score < 80:
-        return "Moderate", score
+    # Simple rule-based classifier
+    score = sum(features) / len(features)  # Average of all features
+    if score > 0.6:
+        return "Safe", score * 100
+    elif score > 0.4:
+        return "Moderate", score * 100
     else:
-        return "Safe", score
+        return "Phishing", (1 - score) * 100
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -38,7 +34,6 @@ def predict():
             'safetyScore': round(safety_score, 2)
         })
     except Exception as e:
-        app.logger.error(f"Error processing URL {url}: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
