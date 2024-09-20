@@ -5,13 +5,31 @@ export default async function handler(req, res) {
         try {
             const { url } = req.body;
 
-            if (!url) {
-                throw new Error('URL is required');
+            if (!url || typeof url !== 'string' || url.trim() === '') {
+                return res.status(400).json({ error: 'Invalid or missing URL' });
             }
 
             const result = await predictPhishing(url);
 
-            res.status(200).json(result);
+            // Ensure the safety score is a number and within the correct range
+            const safetyScore = typeof result.safetyScore === 'number' ? result.safetyScore : 0;
+            const normalizedScore = Math.min(Math.max(safetyScore, 0), 100);
+
+            // Determine the result based on the normalized score
+            let scanResult;
+            if (normalizedScore >= 80) {
+                scanResult = 'Safe';
+            } else if (normalizedScore >= 50) {
+                scanResult = 'Moderate';
+            } else {
+                scanResult = 'Dangerous';
+            }
+
+            res.status(200).json({
+                result: scanResult,
+                safetyScore: normalizedScore,
+                url: url
+            });
         } catch (error) {
             console.error('Custom scan error:', error);
             res.status(500).json({ error: 'Failed to perform custom scan', message: error.message });

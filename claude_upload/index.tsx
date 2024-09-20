@@ -66,9 +66,9 @@ export default function Home() {
 
             // Custom model scan
             const customResponse = await axios.post('/api/customScan', { url: checkUrl });
-            if (customResponse.data && customResponse.data.safetyScore !== undefined) {
-                customScore = customResponse.data.safetyScore;
-                customResult = customResponse.data.result;
+            if (customResponse.data && typeof customResponse.data.safetyScore === 'number') {
+                const customScore = customResponse.data.safetyScore;
+                const customResult = customResponse.data.result;
                 setCustomSafetyScore(customScore);
                 setCustomResult(customResult);
             } else {

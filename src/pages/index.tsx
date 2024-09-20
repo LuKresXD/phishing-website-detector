@@ -11,7 +11,7 @@ import { addScan } from '@/utils/localStorageUtil';
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
-    const [url, setUrl] = useState('google.com');
+    const [url, setUrl] = useState('https://google.com');
     const [virusTotalResult, setVirusTotalResult] = useState('Enter website');
     const [customResult, setCustomResult] = useState('Enter website');
     const [virusTotalSafetyScore, setVirusTotalSafetyScore] = useState(100);
@@ -66,9 +66,9 @@ export default function Home() {
 
             // Custom model scan
             const customResponse = await axios.post('/api/customScan', { url: checkUrl });
-            if (customResponse.data && customResponse.data.safetyScore !== undefined) {
-                customScore = customResponse.data.safetyScore;
-                customResult = customResponse.data.result;
+            if (customResponse.data && typeof customResponse.data.safetyScore === 'number') {
+                const customScore = customResponse.data.safetyScore;
+                const customResult = customResponse.data.result;
                 setCustomSafetyScore(customScore);
                 setCustomResult(customResult);
             } else {
