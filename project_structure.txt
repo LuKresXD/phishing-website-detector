@@ -143,19 +143,31 @@
 │   │       ├── 21894417070872b3.webpack.hot-update.json
 │   │       ├── 39c5d0f88afdf769.webpack.hot-update.json
 │   │       ├── 49a49a143b3028ce.webpack.hot-update.json
+│   │       ├── 62c2e4ace2872be9.webpack.hot-update.json
 │   │       ├── 633457081244afec._.hot-update.json
+│   │       ├── 63ac86d6faa43928.webpack.hot-update.json
 │   │       ├── 76f3ee80449b6ba3.webpack.hot-update.json
 │   │       ├── 7ec28bbd2a2436f4.webpack.hot-update.json
+│   │       ├── 80ba31a53d7a44e6.webpack.hot-update.json
 │   │       ├── 96df3f830290f6a7.webpack.hot-update.json
 │   │       ├── a56ff9c6c70bb63b.webpack.hot-update.json
 │   │       ├── b3a3655b12b6fde4.webpack.hot-update.json
 │   │       ├── bfcd8620a112c30d.webpack.hot-update.json
+│   │       ├── c85d8d8958640d22.webpack.hot-update.json
+│   │       ├── cc4c0615ab3a966b.webpack.hot-update.json
+│   │       ├── dd20ac5b36becb8c.webpack.hot-update.json
+│   │       ├── fa5b50939fbb4dbe.webpack.hot-update.json
 │   │       ├── pages
+│   │       │   ├── _app.cc4c0615ab3a966b.hot-update.js
+│   │       │   ├── history.63ac86d6faa43928.hot-update.js
+│   │       │   ├── history.cc4c0615ab3a966b.hot-update.js
+│   │       │   ├── history.dd20ac5b36becb8c.hot-update.js
 │   │       │   ├── index.0c83b4f326ce31b8.hot-update.js
 │   │       │   ├── index.146e04b97231ef86.hot-update.js
 │   │       │   ├── index.21894417070872b3.hot-update.js
 │   │       │   ├── index.76f3ee80449b6ba3.hot-update.js
 │   │       │   ├── index.7ec28bbd2a2436f4.hot-update.js
+│   │       │   ├── index.80ba31a53d7a44e6.hot-update.js
 │   │       │   ├── index.96df3f830290f6a7.hot-update.js
 │   │       │   └── index.b3a3655b12b6fde4.hot-update.js
 │   │       ├── webpack.0c83b4f326ce31b8.hot-update.js
@@ -163,12 +175,19 @@
 │   │       ├── webpack.21894417070872b3.hot-update.js
 │   │       ├── webpack.39c5d0f88afdf769.hot-update.js
 │   │       ├── webpack.49a49a143b3028ce.hot-update.js
+│   │       ├── webpack.62c2e4ace2872be9.hot-update.js
+│   │       ├── webpack.63ac86d6faa43928.hot-update.js
 │   │       ├── webpack.76f3ee80449b6ba3.hot-update.js
 │   │       ├── webpack.7ec28bbd2a2436f4.hot-update.js
+│   │       ├── webpack.80ba31a53d7a44e6.hot-update.js
 │   │       ├── webpack.96df3f830290f6a7.hot-update.js
 │   │       ├── webpack.a56ff9c6c70bb63b.hot-update.js
 │   │       ├── webpack.b3a3655b12b6fde4.hot-update.js
-│   │       └── webpack.bfcd8620a112c30d.hot-update.js
+│   │       ├── webpack.bfcd8620a112c30d.hot-update.js
+│   │       ├── webpack.c85d8d8958640d22.hot-update.js
+│   │       ├── webpack.cc4c0615ab3a966b.hot-update.js
+│   │       ├── webpack.dd20ac5b36becb8c.hot-update.js
+│   │       └── webpack.fa5b50939fbb4dbe.hot-update.js
 │   └── trace
 ├── README.md
 ├── claude_upload
@@ -200,10 +219,8 @@
 │   ├── server.env.local
 │   ├── tailwind.config.ts
 │   └── tsconfig.json
-├── database.sqlite
 ├── lib
 │   └── db.js
-├── mlModel.js
 ├── models
 │   └── Scan.js
 ├── next-env.d.ts
@@ -217,8 +234,6 @@
 │   ├── favicon.ico
 │   ├── me.png
 │   └── model.pkl
-├── scripts
-│   └── init-db.js
 ├── src
 │   ├── .DS_Store
 │   ├── components
@@ -245,11 +260,10 @@
 │   ├── styles
 │   │   └── globals.css
 │   └── utils
-│       ├── localStorageUtil.ts
-│       └── ml_client.js
+│       └── localStorageUtil.ts
 ├── tailwind.config.ts
 ├── tsconfig.json
 └── typings
     └── index.d.ts
 
-44 directories, 209 files
+43 directories, 224 files

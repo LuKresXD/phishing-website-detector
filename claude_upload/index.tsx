@@ -149,7 +149,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Phishing Website Detector 🕵️</title>
+                <title>Phishing Website Detector 🕵🏼</title>
                 <link rel="stylesheet" href="https://unpkg.com/pattern.css@1.0.0/dist/pattern.min.css"/>
                 <meta name="description" content="Check if a website is safe or a phishing attempt"/>
                 <meta property='theme-color' content='#17171a'/>
@@ -248,7 +248,7 @@ export default function Home() {
                                         </div>
                                         <div
                                             className="relative z-10 bg-[#313338] p-6 rounded-2xl shadow-lg aspect-[2/1] transition-all duration-300 ease-in-out transform group-hover:scale-105">
-                                            <h2 className="text-2xl font-bold text-blue-300 mb-4">Custom Model Scan</h2>
+                                            <h2 className="text-2xl font-bold text-blue-300 mb-4">My Own Model Scan</h2>
                                             <div className="flex justify-between items-center">
                                                 <div>
                                                     <p className="text-blue-100 text-xl py-1">Result:</p>
