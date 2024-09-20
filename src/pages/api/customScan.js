@@ -1,81 +1,6 @@
-import { spawn } from 'child_process';
-import path from 'path';
-
-function extractFeatures(url) {
-    return new Promise((resolve, reject) => {
-        const pythonProcess = spawn('python', [path.join(process.cwd(), 'src', 'ml', 'feature_extractor.py'), url]);
-        let output = '';
-
-        pythonProcess.stdout.on('data', (data) => {
-            output += data.toString();
-        });
-
-        pythonProcess.stderr.on('data', (data) => {
-            console.error(`Python Error: ${data}`);
-        });
-
-        pythonProcess.on('close', (code) => {
-            if (code !== 0) {
-                reject(new Error(`Python process exited with code ${code}`));
-            } else {
-                try {
-                    const features = JSON.parse(output);
-                    resolve(features);
-                } catch (error) {
-                    reject(new Error('Failed to parse feature extraction output'));
-                }
-            }
-        });
-    });
-}
-
-function calculateSafetyScore(features, url) {
-    console.log("Raw features:", JSON.stringify(features, null, 2));
-
-    let score = 100;
-
-    const penaltyWeights = {
-        UsingIp: 10,
-        shortUrl: 5,
-        AbnormalURL: 8,
-        redirecting: 5,
-        prefixSuffix: 3,
-        SubDomains: 2,
-        Favicon: 2,
-        NonStdPort: 5,
-        HTTPSDomainURL: 5,
-        RequestURL: 4,
-        AnchorURL: 4,
-        LinksInScriptTags: 3,
-        ServerFormHandler: 3,
-        InfoEmail: 3,
-        WebsiteForwarding: 3,
-        StatusBarCust: 2,
-        DisableRightClick: 2,
-        UsingPopupWindow: 2,
-        IframeRedirection: 4
-    };
-
-    for (const [feature, weight] of Object.entries(penaltyWeights)) {
-        if (features[feature] === "bad") {
-            score -= weight;
-            console.log(`Penalty: ${feature}, Weight: ${weight}, New Score: ${score}`);
-        }
-    }
-
-    // Штраф за отсутствие HTTPS
-    if (features["Hppts"] === "bad") {
-        score -= 10;
-        console.log(`Penalty: No HTTPS, Weight: 10, New Score: ${score}`);
-    }
-
-    // Ensure the score is between 0 and 100
-    score = Math.max(0, Math.min(100, (score-30)*5));
-
-    console.log(`Final Score: ${score}`);
-
-    return score;
-}
+import { extractFeatures } from '../../utils/featureExtractor';
+import { predict } from '../../utils/simpleModel';
+import { calculateSafetyScore } from '../../utils/safetyScore';
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
@@ -86,13 +11,17 @@ export default async function handler(req, res) {
                 return res.status(400).json({ error: 'Invalid or missing URL' });
             }
 
-            const features = await extractFeatures(url);
-            const safetyScore = calculateSafetyScore(features, url);
+            const features = extractFeatures(url);
+            const mlPrediction = predict(features);
+            const safetyScore = calculateSafetyScore(features);
+
+            // Combine ML prediction and safety score
+            const combinedScore = (mlPrediction * 100 + safetyScore) / 2;
 
             let scanResult;
-            if (safetyScore >= 80) {
+            if (combinedScore >= 80) {
                 scanResult = 'Safe';
-            } else if (safetyScore >= 60) {
+            } else if (combinedScore >= 60) {
                 scanResult = 'Moderate';
             } else {
                 scanResult = 'Dangerous';
@@ -100,7 +29,8 @@ export default async function handler(req, res) {
 
             res.status(200).json({
                 result: scanResult,
-                safetyScore: parseFloat(safetyScore.toFixed(2)),
+                safetyScore: parseFloat(combinedScore.toFixed(2)),
+                mlPrediction: parseFloat((mlPrediction * 100).toFixed(2)),
                 url: url
             });
         } catch (error) {
