@@ -27,9 +27,11 @@ export default function HistoryPage() {
     function fetchHistory(page: number) {
         setIsLoading(true);
         const allScans = getScans();
+        console.log('All scans:', allScans); // Отладочный вывод
         const startIndex = (page - 1) * ITEMS_PER_PAGE;
         const endIndex = startIndex + ITEMS_PER_PAGE;
         const paginatedScans = allScans.slice(startIndex, endIndex);
+        console.log('Paginated scans:', paginatedScans); // Отладочный вывод
 
         setHistory(paginatedScans);
         setTotalPages(Math.ceil(allScans.length / ITEMS_PER_PAGE));
@@ -85,7 +87,7 @@ export default function HistoryPage() {
     return (
         <>
             <Head>
-                <title>History 📜🔍‍💻</title>
+                <title>History 📜📝✋🏻</title>
                 <link rel="stylesheet" href="https://unpkg.com/pattern.css@1.0.0/dist/pattern.min.css"/>
                 <meta name="description" content="View the history of scanned websites"/>
                 <meta property='theme-color' content='#17171a'/>
@@ -99,7 +101,7 @@ export default function HistoryPage() {
                         className={`container mx-auto px-4 sm:px-6 lg:px-8 brightness-100 transition-all ${isLoading ? 'brightness-50' : ''}`}
                         initial={{transform: 'translateY(30px)', opacity: 0}}
                         whileInView={{transform: 'translateY(0px)', opacity: 100}}
-                        transition={{duration: 0.5, delay: 0.1, ease: [0.39, 0.21, 0.12, 0.96],}}
+                        transition={{duration: 0.5, delay: 0.1, ease: [0.39, 0.21, 0.12, 0.96]}}
                         viewport={{amount: 0.1, once: true}}
                         ref={ref}
                     >
@@ -143,7 +145,7 @@ export default function HistoryPage() {
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-blue-700 font-poppins sm:pl-0">{url.length > 25 ? `${url.substring(0, 25)}...` : url}</td>
                                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{new Date(date).toLocaleString()}</td>
                                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{virusTotalResult}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{customResult}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-100 font-poppins">{customResult || 'N/A'}</td>
                                                     <td className={`whitespace-nowrap px-3 py-4 text-sm font-poppins ${getSafetyScoreColor(virusTotalSafetyScore)}`}>
                                                         {formatSafetyScore(virusTotalSafetyScore)}
                                                     </td>
@@ -155,8 +157,7 @@ export default function HistoryPage() {
                                         )}
                                         </tbody>
                                     </table>
-                                    <nav
-                                        className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
+                                    <nav className="flex items-center justify-between border-t border-zinc-700 bg-transparent pt-3 px-2">
                                         <div className="flex flex-1 items-center gap-3">
                                             <button onClick={handlePrevious}
                                                     className="relative inline-flex items-center font-poppins rounded-md bg-zinc-800 border-[1px] border-zinc-700 hover:bg-zinc-700 hover:border-blue-700 duration-300 active:translate-y-1 px-3 py-2 text-sm font-semibold text-blue-100">
@@ -195,7 +196,7 @@ export default function HistoryPage() {
                 <footer>
                     <div className="h-0.5 w-full rounded-lg bg-gradient-to-r from-secondary via-accent to-secondary"/>
                     <h2 className="font-leaguespartan text-center font-semibold text-base text-text pt-2">
-                        phishing.lukres.dev - Made with NextJS, TailwindCSS, and ❤ by Luka
+                        phishing.lukres.dev - Made with NextJS, TailwindCSS, and ♥ by Luka
                     </h2>
                 </footer>
             </div>

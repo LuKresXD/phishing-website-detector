@@ -10,8 +10,9 @@ export default async function handler(req, res) {
             limit: limit,
             offset: offset,
             order: [['date', 'DESC']],
-            attributes: ['url', 'result', 'date', 'safetyScore'] // Include safetyScore
+            attributes: ['url', 'virusTotalResult', 'customResult', 'virusTotalSafetyScore', 'customSafetyScore', 'date']
         });
+        console.log('Retrieved scans:', rows);
         res.status(200).json({
             totalPages: Math.ceil(count / limit),
             currentPage: page,

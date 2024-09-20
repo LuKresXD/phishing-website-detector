@@ -67,23 +67,26 @@ export default function Home() {
             // Custom model scan
             const customResponse = await axios.post('/api/customScan', { url: checkUrl });
             if (customResponse.data && typeof customResponse.data.safetyScore === 'number') {
-                const customScore = customResponse.data.safetyScore;
-                const customResult = customResponse.data.result;
+                customScore = customResponse.data.safetyScore;
+                customResult = customResponse.data.result;
                 setCustomSafetyScore(customScore);
                 setCustomResult(customResult);
             } else {
-                throw new Error('Invalid response from custom scan API');
+                console.error('Invalid response from custom scan API:', customResponse.data);
+                customScore = 0;
+                customResult = 'Error';
             }
 
-            // Save scan to history
-            addScan({
+            const scanData = {
                 url: checkUrl,
                 virusTotalResult: vtResult,
                 customResult: customResult,
                 virusTotalSafetyScore: vtScore,
                 customSafetyScore: customScore,
                 date: new Date().toISOString()
-            });
+            };
+            console.log('Saving scan data:', scanData); // Отладочный вывод
+            addScan(scanData);
 
         } catch (error) {
             console.error('Error during URL check:', error);
@@ -91,8 +94,15 @@ export default function Home() {
             setCustomResult('Error');
             setVirusTotalSafetyScore(0);
             setCustomSafetyScore(0);
-        } finally {
-            setIsLoading(false);
+
+            addScan({
+                url: checkUrl,
+                virusTotalResult: 'Error',
+                customResult: 'Error',
+                virusTotalSafetyScore: 0,
+                customSafetyScore: 0,
+                date: new Date().toISOString()
+            });
         }
     }
 

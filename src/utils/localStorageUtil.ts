@@ -1,11 +1,9 @@
-// src/utils/localStorageUtil.ts
-
 export interface Scan {
     url: string;
     virusTotalResult: string;
     customResult: string;
-    virusTotalSafetyScore: number | null;
-    customSafetyScore: number | null;
+    virusTotalSafetyScore: number;
+    customSafetyScore: number;
     date: string;
 }
 
@@ -17,11 +15,13 @@ export const saveScans = (scans: Scan[]): void => {
 
 export const getScans = (): Scan[] => {
     const scans = localStorage.getItem(STORAGE_KEY);
+    console.log('Raw scans from localStorage:', scans); // Отладочный вывод
     return scans ? JSON.parse(scans) : [];
 };
 
 export const addScan = (scan: Scan): void => {
     const scans = getScans();
-    scans.unshift(scan); // Add new scan to the beginning of the array
+    scans.unshift(scan);
+    console.log('Scans after adding new scan:', scans); // Отладочный вывод
     saveScans(scans);
 };

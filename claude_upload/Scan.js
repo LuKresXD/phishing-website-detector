@@ -6,18 +6,25 @@ const Scan = sequelize.define('Scan', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    result: {
+    virusTotalResult: {
         type: DataTypes.STRING,
+        allowNull: false
+    },
+    virusTotalSafetyScore: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    customResult: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    customSafetyScore: {
+        type: DataTypes.FLOAT,
         allowNull: false
     },
     date: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
-    },
-    safetyScore: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-        defaultValue: 0
     }
 });
 
