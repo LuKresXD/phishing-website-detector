@@ -127,7 +127,9 @@
 │   │   └── webpack
 │   │       ├── 633457081244afec._.hot-update.json
 │   │       ├── 9a31f57769ba79e6.webpack.hot-update.json
-│   │       └── webpack.9a31f57769ba79e6.hot-update.js
+│   │       ├── d1cc9c12fcfbcad4.webpack.hot-update.json
+│   │       ├── webpack.9a31f57769ba79e6.hot-update.js
+│   │       └── webpack.d1cc9c12fcfbcad4.hot-update.js
 │   └── trace
 ├── README.md
 ├── claude_upload
@@ -140,20 +142,24 @@
 │   ├── customScan.js
 │   ├── db.js
 │   ├── exportHistory.js
+│   ├── featureExtractor.js
 │   ├── globals.css
 │   ├── history.js
 │   ├── history.tsx
 │   ├── index.d.ts
 │   ├── index.tsx
 │   ├── localStorageUtil.ts
+│   ├── mlModel.js
 │   ├── next-env.d.ts
 │   ├── next.config.mjs
 │   ├── package.json
 │   ├── postcss.config.js
 │   ├── project_structure.txt
 │   ├── proxy.js
+│   ├── safetyScore.js
 │   ├── saveScan.js
 │   ├── server.env.local
+│   ├── simpleModel.js
 │   ├── tailwind.config.ts
 │   └── tsconfig.json
 ├── lib
@@ -181,6 +187,7 @@
 │   │   ├── api
 │   │   │   ├── customScan.js
 │   │   │   ├── exportHistory.js
+│   │   │   ├── healthCheck.js
 │   │   │   ├── history.js
 │   │   │   ├── proxy.js
 │   │   │   └── saveScan.js
@@ -189,6 +196,7 @@
 │   ├── styles
 │   │   └── globals.css
 │   └── utils
+│       ├── api.js
 │       ├── featureExtractor.js
 │       ├── localStorageUtil.ts
 │       ├── mlModel.js
@@ -199,4 +207,4 @@
 └── typings
     └── index.d.ts
 
-38 directories, 162 files
+38 directories, 170 files
