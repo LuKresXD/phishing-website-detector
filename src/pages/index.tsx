@@ -121,7 +121,7 @@ export default function Home() {
     }
 
     async function waitForAnalysisCompletion(analysisId: string) {
-        const maxAttempts = 10;
+        const maxAttempts = 30;
         const delayBetweenAttempts = 2000; // 2 seconds
 
         for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -166,7 +166,10 @@ export default function Home() {
                     </div>
                     {isLoading && (
                         <div
-                            className="absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-4 border-t-4 border-gray-700 border-t-white rounded-full animate-spin"></div>
+                            className="fixed inset-0 z-50 flex items-center justify-center"
+                        >
+                            <div className="w-16 h-16 border-4 border-t-4 border-gray-700 border-t-white rounded-full animate-spin"></div>
+                        </div>
                     )}
                     <motion.div
                         className={`container mx-auto px-4 sm:px-6 lg:px-8 brightness-100 transition-all relative z-10 ${isLoading ? 'brightness-50' : ''}`}
