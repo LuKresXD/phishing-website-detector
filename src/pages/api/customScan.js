@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
     if (req.method !== 'POST') {
         res.setHeader('Allow', ['POST']);
-        return res.status(405).end(`Method ${req.method} Not Allowed`);
+        return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
     }
 
     try {
@@ -28,12 +28,32 @@ export default async function handler(req, res) {
         const { url } = req.body;
 
         if (!url || typeof url !== 'string' || url.trim() === '') {
-            return res.status(400).json({ error: 'Invalid or missing URL' });
+            return res.status(400).json({ error: 'Invalid or missing URL. Please provide a valid URL.' });
         }
 
-        const features = extractFeatures(url);
-        const mlPrediction = predict(features);
-        const safetyScore = calculateSafetyScore(features);
+        let features;
+        try {
+            features = extractFeatures(url);
+        } catch (error) {
+            console.error('Feature extraction error:', error);
+            return res.status(400).json({ error: `Failed to extract features from the provided URL: ${error.message}. Please check the URL and try again.` });
+        }
+
+        let mlPrediction;
+        try {
+            mlPrediction = predict(features);
+        } catch (error) {
+            console.error('ML prediction error:', error);
+            return res.status(500).json({ error: `An error occurred during the machine learning prediction: ${error.message}. Please try again later.` });
+        }
+
+        let safetyScore;
+        try {
+            safetyScore = calculateSafetyScore(features);
+        } catch (error) {
+            console.error('Safety score calculation error:', error);
+            return res.status(500).json({ error: `An error occurred while calculating the safety score: ${error.message}. Please try again later.` });
+        }
 
         const combinedScore = (mlPrediction * 100 + safetyScore) / 2;
 
@@ -57,6 +77,6 @@ export default async function handler(req, res) {
         res.status(200).json(response);
     } catch (error) {
         console.error('Custom scan error:', error);
-        res.status(500).json({ error: 'Failed to perform custom scan', message: error.message });
+        res.status(500).json({ error: `An unexpected error occurred during the custom scan: ${error.message}. Please try again later.` });
     }
 }
