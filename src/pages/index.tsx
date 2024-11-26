@@ -10,6 +10,7 @@ import Typewriter from 'typewriter-effect';
 import { addScan } from '@/utils/localStorageUtil';
 import ErrorMessage from '@/components/ErrorMessage';
 import { useUrlValidation } from '@/hooks/useUrlValidation';
+import ModelInsights from '@/components/ModelInsights';
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
@@ -20,8 +21,19 @@ export default function Home() {
     const [customSafetyScore, setCustomSafetyScore] = useState(100);
     const [scannedUrl, setScannedUrl] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [modelMetadata, setModelMetadata] = useState<any>(null);
+    const [features, setFeatures] = useState<Record<string, number>>({});
+    const [confidence, setConfidence] = useState(0);
 
     const { isValid, error: urlError } = useUrlValidation(url);
+
+    // Fetch model metadata on component mount
+    useEffect(() => {
+        fetch('/models/model_metadata.json')
+            .then(res => res.json())
+            .then(data => setModelMetadata(data))
+            .catch(err => console.error('Error loading model metadata:', err));
+    }, []);
 
     function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
         setUrl(e.target.value);
@@ -80,11 +92,13 @@ export default function Home() {
 
             // Custom model scan
             const customResponse = await axios.post('/api/customScan', { url: checkUrl }, { timeout: 30000 });
-            if (customResponse.data && typeof customResponse.data.safetyScore === 'number') {
+            if (customResponse.data) {
                 customScore = customResponse.data.safetyScore;
                 customResult = customResponse.data.result;
                 setCustomSafetyScore(customScore);
                 setCustomResult(customResult);
+                setFeatures(customResponse.data.features || {});
+                setConfidence(customResponse.data.confidence || 0);
             } else {
                 console.error('Invalid response from custom scan API:', customResponse.data);
                 throw new Error('Invalid response from custom scan API');
@@ -170,7 +184,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Phishing Website Detector 🕵️‍♀️</title>
+                <title>Phishing Website Detector 🕵🏻‍♂️</title>
                 <link rel="stylesheet" href="https://unpkg.com/pattern.css@1.0.0/dist/pattern.min.css"/>
                 <meta name="description" content="Check if a website is safe or a phishing attempt"/>
                 <meta property='theme-color' content='#17171a'/>
@@ -197,7 +211,7 @@ export default function Home() {
                         ref={ref}
                     >
                         <h1 className='font-bold sm:text-6xl text-4xl font-poppins text-center text-text'>
-                            <span className="text-blue-500">Phishing</span> <span className="text-blue-100">Website Detector 🕵️‍♀️</span>
+                            <span className="text-blue-500">Phishing</span> <span className="text-blue-100">Website Detector 🕵🏻‍♂️</span>
                         </h1>
                         <p className='text-blue-100 text-lg text-center mt-4 font-poppins'>
                             {inView &&
@@ -245,7 +259,8 @@ export default function Home() {
                                         </div>
                                         <div
                                             className="relative z-10 bg-[#313338] p-6 rounded-2xl shadow-lg aspect-[2/1] transition-all duration-300 ease-in-out transform group-hover:scale-105">
-                                            <h2 className="text-2xl font-bold text-blue-300 mb-4">VirusTotal Scan</h2>
+                                            <h2 className="text-2xl font-bold text-blue-300 mb-4">VirusTotal
+                                                Scan</h2>
                                             <div className="flex justify-between items-center">
                                                 <div>
                                                     <p className="text-blue-100 text-xl py-1">Result:</p>
@@ -277,7 +292,8 @@ export default function Home() {
                                         </div>
                                         <div
                                             className="relative z-10 bg-[#313338] p-6 rounded-2xl shadow-lg aspect-[2/1] transition-all duration-300 ease-in-out transform group-hover:scale-105">
-                                            <h2 className="text-2xl font-bold text-blue-300 mb-4">My Own Model Scan</h2>
+                                            <h2 className="text-2xl font-bold text-blue-300 mb-4">My Own Model
+                                                Scan</h2>
                                             <div className="flex justify-between items-center">
                                                 <div>
                                                     <p className="text-blue-100 text-xl py-1">Result:</p>
@@ -302,6 +318,16 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Add ML Model Insights when results are available */}
+                                {customResult !== 'Enter website' && customResult !== 'Checking...' && (
+                                    <ModelInsights
+                                        prediction={1 - (customSafetyScore / 100)}
+                                        confidence={confidence}
+                                        features={features}
+                                        modelMetadata={modelMetadata}
+                                    />
+                                )}
                             </div>
                         </div>
                     </motion.div>
@@ -309,7 +335,7 @@ export default function Home() {
                 <footer>
                     <div className="h-0.5 w-full rounded-lg bg-gradient-to-r from-secondary via-accent to-secondary"/>
                     <h2 className="font-leaguespartan text-center font-semibold text-base text-text pt-2">
-                        phishing.lukres.dev - Made with NextJS, TailwindCSS, and ❤ by Luka
+                        phishing.lukres.dev - Made with NextJS, TailwindCSS, and ♥ by Luka
                     </h2>
                 </footer>
             </div>

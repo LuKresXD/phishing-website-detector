@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "training_date": "2024-11-26T19:25:50.672906",
+  "num_features": 20,
+  "feature_names": [
+    "url_length",
+    "domain_length",
+    "path_length",
+    "num_digits",
+    "num_params",
+    "has_https",
+    "num_special",
+    "num_fragments",
+    "has_port",
+    "num_subdirs",
+    "has_suspicious_tld",
+    "num_dots",
+    "has_at_symbol",
+    "has_ip_pattern",
+    "num_subdomains",
+    "path_depth",
+    "num_redirects",
+    "has_login_terms",
+    "num_encoded_chars",
+    "has_suspicious_strs"
+  ],
+  "metrics": {
+    "classification_report": {
+      "0": {
+        "precision": 0.9821428571428571,
+        "recall": 0.99,
+        "f1-score": 0.9860557768924303,
+        "support": 1000.0
+      },
+      "1": {
+        "precision": 0.9899091826437941,
+        "recall": 0.9819819819819819,
+        "f1-score": 0.985929648241206,
+        "support": 999.0
+      },
+      "accuracy": 0.9859929964982491,
+      "macro avg": {
+        "precision": 0.9860260198933256,
+        "recall": 0.985990990990991,
+        "f1-score": 0.9859927125668182,
+        "support": 1999.0
+      },
+      "weighted avg": {
+        "precision": 0.9860240773406741,
+        "recall": 0.9859929964982491,
+        "f1-score": 0.9859927441147549,
+        "support": 1999.0
+      }
+    },
+    "roc_auc": 0.9988923923923924,
+    "average_precision": 0.998912402174316
+  },
+  "model_type": "random_forest",
+  "hyperparameters": {
+    "n_estimators": 200,
+    "max_depth": 15,
+    "min_samples_split": 5,
+    "min_samples_leaf": 2,
+    "class_weight": "balanced"
+  }
+}
