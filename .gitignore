@@ -36,3 +36,5 @@ yarn-error.log*
 next-env.d.ts
 
 database.sqlite
+
+/ml/venv/

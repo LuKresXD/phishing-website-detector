@@ -1,11 +1,12 @@
-import { extractFeatures } from '../../utils/featureExtractor';
-import { predict } from '../../utils/simpleModel';
-import { calculateSafetyScore } from '../../utils/safetyScore';
+import axios from 'axios';
 import cors from 'cors';
+
+const ML_SERVER_PORT = process.env.ML_SERVER_PORT || 5002;
+const ML_SERVER_URL = `http://127.0.0.1:${ML_SERVER_PORT}`;
 
 const corsMiddleware = cors({
     origin: ['http://localhost:3001', 'https://phishing.lukres.dev'],
-    methods: ['POST'],
+    methods: ['POST']
 });
 
 export default async function handler(req, res) {
@@ -31,52 +32,46 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Invalid or missing URL. Please provide a valid URL.' });
         }
 
-        let features;
         try {
-            features = extractFeatures(url);
-        } catch (error) {
-            console.error('Feature extraction error:', error);
-            return res.status(400).json({ error: `Failed to extract features from the provided URL: ${error.message}. Please check the URL and try again.` });
-        }
+            console.log(`Calling ML server at ${ML_SERVER_URL}/predict`);
+            // Call Python ML server
+            const mlResponse = await axios.post(`${ML_SERVER_URL}/predict`, { url }, {
+                timeout: 30000,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        let mlPrediction;
-        try {
-            mlPrediction = predict(features);
+            if (mlResponse.data && typeof mlResponse.data.safetyScore === 'number') {
+                const response = {
+                    result: mlResponse.data.result,
+                    safetyScore: mlResponse.data.safetyScore,
+                    probabilities: mlResponse.data.probabilities,
+                    url: url
+                };
+
+                console.log('Sending response:', response);
+                res.status(200).json(response);
+            } else {
+                console.error('Invalid response from ML server:', mlResponse.data);
+                throw new Error('Invalid response from ML server');
+            }
         } catch (error) {
             console.error('ML prediction error:', error);
-            return res.status(500).json({ error: `An error occurred during the machine learning prediction: ${error.message}. Please try again later.` });
+            if (error.code === 'ECONNREFUSED') {
+                res.status(503).json({
+                    error: 'ML server is not running. Please ensure the Python server is started.'
+                });
+            } else {
+                res.status(500).json({
+                    error: `An error occurred during prediction: ${error.message}. Please try again later.`
+                });
+            }
         }
-
-        let safetyScore;
-        try {
-            safetyScore = calculateSafetyScore(features);
-        } catch (error) {
-            console.error('Safety score calculation error:', error);
-            return res.status(500).json({ error: `An error occurred while calculating the safety score: ${error.message}. Please try again later.` });
-        }
-
-        const combinedScore = (mlPrediction * 100 + safetyScore) / 2;
-
-        let scanResult;
-        if (combinedScore >= 80) {
-            scanResult = 'Safe';
-        } else if (combinedScore >= 60) {
-            scanResult = 'Moderate';
-        } else {
-            scanResult = 'Dangerous';
-        }
-
-        const response = {
-            result: scanResult,
-            safetyScore: parseFloat(combinedScore.toFixed(2)),
-            mlPrediction: parseFloat((mlPrediction * 100).toFixed(2)),
-            url: url
-        };
-
-        console.log('Sending response:', response);
-        res.status(200).json(response);
     } catch (error) {
         console.error('Custom scan error:', error);
-        res.status(500).json({ error: `An unexpected error occurred during the custom scan: ${error.message}. Please try again later.` });
+        res.status(500).json({
+            error: `An unexpected error occurred: ${error.message}. Please try again later.`
+        });
     }
 }
