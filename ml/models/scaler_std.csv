@@ -1,0 +1,14 @@
+,0
+domain_length,8.032961185596667
+num_subdomains,0.46943528551482944
+contains_digits,0.29618618913336703
+special_char_count,1.016972290137995
+entropy,0.39145344073575344
+has_phishing_keywords,0.0728171595836079
+has_suspicious_tld,0.041149375495845346
+vowel_to_consonant_ratio,0.23727800293685813
+longest_word_length,4.822738590291679
+path_depth,0.0
+average_token_length,1.9376216473120689
+char_repetition_count,0.07444463758218735
+mixed_case,0.0
