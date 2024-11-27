@@ -47,7 +47,7 @@ except Exception as e:
     logger.error(f"Error loading model or scalers: {e}")
     raise
 
-@app.route('/predict', methods=['POST', 'OPTIONS'])
+@app.route('/customScan', methods=['POST', 'OPTIONS'])
 def predict():
     if request.method == 'OPTIONS':
         return '', 204
