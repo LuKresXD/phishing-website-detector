@@ -21,6 +21,8 @@ mkdir -p ml/models
 
 # Install Node.js dependencies
 echo "Installing Node.js dependencies..."
+pm2 stop phishing-detector-ml
+pm2 stop phishing-detector-web
 npm install
 
 # Build Next.js application
@@ -29,8 +31,6 @@ npm run build
 
 # Start PM2 with ecosystem file
 echo "Starting PM2 services..."
-pm2 stop phishing-detector-ml
-pm2 stop phishing-detector-web
 pm2 start ecosystem.config.js
 
 # Save PM2 configuration
