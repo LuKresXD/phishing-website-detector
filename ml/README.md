@@ -6,15 +6,15 @@ This directory contains the machine learning component of the Phishing Website D
 
 Based on our evaluation metrics, the model demonstrates strong performance in phishing detection:
 
-- **Accuracy**: 80.0%
-- **ROC AUC**: 0.956 (for both classes)
+- **Accuracy**: 93.1%
+- **ROC AUC**: 0.968 (for both classes)
 
 ### Detailed Metrics
 
 | Class      | Precision | Recall | F1-Score |
-|------------|-----------|---------|----------|
-| Legitimate | 0.737     | 0.933   | 0.824    |
-| Phishing   | 0.909     | 0.667   | 0.769    |
+|------------|-----------|--------|----------|
+| Legitimate | 0.960     | 0.900  | 0.929    |
+| Phishing   | 0.906     | 0.963  | 0.933    |
 
 ### Visualization of Results
 
@@ -31,16 +31,16 @@ Based on our evaluation metrics, the model demonstrates strong performance in ph
 
 The model utilizes a carefully selected set of features extracted from URLs and domain names. Here are the top 10 most important features based on absolute coefficient values:
 
-1. HTTPS Protocol (2.280)
-2. Website Forwarding (1.065)
-3. URL Length (0.840)
-4. Shortened URL (0.716)
-5. DNS Record (0.684)
-6. Anchor URL (0.673)
-7. Links Pointing to Page (0.607)
-8. Entropy (0.438)
-9. Subdomains (0.395)
-10. Favicon (0.367)
+1. **HTTPS Protocol** (4.450)
+2. **URL Length** (3.199)
+3. **Prefix-Suffix in Domain Name** (0.908)
+4. **DNS Record** (0.900)
+5. **Links in Scripts** (0.888)
+6. **Entropy** (0.831)
+7. **Favicon** (0.682)
+8. **Suspicious TLD** (0.620)
+9. **"@" Symbol in URL** (0.610)
+10. **Subdomains** (0.609)
 
 ### Feature Importance Visualization
 ![Feature Importance](../docs/assets/feature_importance.png)
