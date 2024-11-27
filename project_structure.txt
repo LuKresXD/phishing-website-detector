@@ -1,18 +1,35 @@
 .
 ├── .DS_Store
+├── .env.example
 ├── .env.local
 ├── .eslintrc.json
 ├── .gitignore
 ├── README.md
 ├── data
+├── docs
+│   ├── .DS_Store
+│   ├── assets
+│   │   ├── .DS_Store
+│   │   ├── confusion_matrix.png
+│   │   ├── feature_importance.csv
+│   │   ├── feature_importance.png
+│   │   ├── feature_importance_all.png
+│   │   ├── misclassified_samples.csv
+│   │   ├── precision_recall_curve.png
+│   │   └── roc_curve.png
+│   └── metrics.json
+├── ecosystem.config.js
 ├── lib
 │   └── db.js
+├── logs
 ├── ml
+│   ├── .DS_Store
 │   ├── README.md
 │   ├── __pycache__
 │   │   ├── preprocess.cpython-311.pyc
 │   │   └── train.cpython-311.pyc
 │   ├── data
+│   │   ├── PhiUSIIL_Phishing_URL_Dataset.csv
 │   │   ├── test.csv
 │   │   ├── test_processed.csv
 │   │   ├── train.csv
@@ -47,6 +64,7 @@
 │   ├── model.pkl
 │   └── models
 │       └── model_metadata.json
+├── setup.sh
 ├── src
 │   ├── .DS_Store
 │   ├── components
@@ -80,4 +98,4 @@
 └── typings
     └── index.d.ts
 
-20 directories, 61 files
+23 directories, 76 files

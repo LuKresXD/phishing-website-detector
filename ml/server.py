@@ -3,7 +3,6 @@ import joblib
 import pandas as pd
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from urllib.parse import urlparse
 from preprocess import extract_features
 import logging
 
@@ -48,19 +47,6 @@ except Exception as e:
     logger.error(f"Error loading model or scalers: {e}")
     raise
 
-def extract_domain(url):
-    """Extract the domain from a given URL."""
-    try:
-        parsed = urlparse(url)
-        domain = parsed.netloc or parsed.path.split('/')[0]
-        domain = domain.lower().strip()
-        if domain.startswith("www."):
-            domain = domain[4:]  # Remove "www." if present
-        return domain
-    except Exception as e:
-        print(f"Error parsing URL {url}: {e}")
-        return None
-
 @app.route('/api/customScan', methods=['POST', 'OPTIONS'])
 def predict():
     if request.method == 'OPTIONS':
@@ -69,7 +55,6 @@ def predict():
     try:
         data = request.get_json()
         url = data.get('url')
-        url = extract_domain(url)
 
         if not url:
             return jsonify({'error': 'No URL provided'}), 400

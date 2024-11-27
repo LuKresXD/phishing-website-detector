@@ -1,72 +1,106 @@
-# Phishing Website Detector 🕵🏻‍♂️
+# Phishing Website Detector 🔍
 
-This project is an Internal Assigment on computer science by Krestinin Luka
-## Description
-The Phishing Website Detector is a web application designed to enhance internet safety by checking URLs to determine their security status. It helps users identify potentially harmful websites, using the VirusTotal API to perform the safety checks. Built with Next.js and React, this application is an excellent tool for anyone looking to enhance their cybersecurity measures.
+![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
+![Next.js](https://img.shields.io/badge/next.js-13.0+-000000.svg)
+![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
+
+A sophisticated web application combining machine learning and modern web technologies to detect phishing websites. The system utilizes both the VirusTotal API and a custom-trained machine learning model to provide comprehensive security assessments.
+
+→ [**View Machine Learning Documentation**](ml/) ←
 
 ## Features
-- **Real-Time URL Scanning**: Analyze URLs to determine if they are safe, moderate, or dangerous using the VirusTotal API.
-- **Interactive UI**: A user-friendly interface that provides immediate feedback on the safety of websites.
-- **Responsive Design**: Fully responsive web design that works well on desktops, tablets, and mobile devices.
 
-## Installation
+- **Dual Analysis System**
+    - VirusTotal API Integration for real-time threat detection
+    - Custom ML model for independent analysis
+    - Combined risk assessment and scoring
 
-To get a local copy up and running follow these simple steps.
+- **Modern Web Interface**
+    - Real-time URL scanning
+    - Interactive safety score visualization
+    - Comprehensive scan history
+    - Export functionality for scan results
+
+- **Advanced Security Features**
+    - URL validation and sanitization
+    - Rate limiting and error handling
+    - Cross-site request forgery protection
+    - Input validation and sanitization
+
+## Architecture
+
+The project consists of two main components:
+
+1. **Frontend** (Next.js)
+    - Modern, responsive user interface
+    - Real-time safety score visualization
+    - Historical data visualization
+    - Export functionality
+
+2. **Backend**
+    - VirusTotal API integration
+    - [Custom ML model server](ml/)
+    - SQLite database for scan history
+    - RESTful API endpoints
+
+## Getting Started
 
 ### Prerequisites
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+- Node.js 18+
+- Python 3.8+
+- VirusTotal API key
 
 ### Installation
-1. Clone the repo
-   ```sh
+
+1. Clone the repository:
+   ```bash
    git clone https://github.com/LuKresXD/phishing-website-detector.git
+   cd phishing-website-detector
    ```
-2. Install NPM packages
-   ```sh
+
+2. Install frontend dependencies:
+   ```bash
    npm install
    ```
 
-## Usage
+3. Install ML server dependencies:
+   ```bash
+   cd ml
+   pip install -r requirements.txt
+   ```
 
-To use the Phishing Website Detector, follow these steps:
+4. Create a `.env` file in the root directory:
+   ```env
+   VIRUSTOTAL_API_KEY=your_api_key_here
+   ML_SERVER_PORT=5002
+   ```
 
-1. **Start the application**:
-    ```sh
-    npm run dev
-    ```
-    This will run the application in development mode.
+### Running the Application
 
-2. **Open your browser**:
-    Navigate to `http://localhost:3001` to view the app.
+1. Start the frontend development server:
+   ```bash
+   npm run dev
+   ```
 
-3. **Enter a URL**:
-    Use the input field to enter a URL you wish to check for safety.
+2. Start the ML server:
+   ```bash
+   cd ml
+   python server.py
+   ```
 
-4. **Submit the URL**:
-    Click the "Check" button to submit the URL for scanning.
-
-5. **View results**:
-    The results will display directly on the page, showing whether the URL is safe, moderate, or dangerous.
+The application will be available at `http://localhost:3001`.
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+This project is licensed under the MIT License - see the `LICENSE` file for details.
 
 ## Contact
 
 Luka - [@lukres](https://t.me/lukres) - [me@lukres.dev](mailto:me@lukres.dev)
 
-Project Link: [https://github.com/LuKresXD/phishing-website-detector)
+Project Link: [https://github.com/LuKresXD/phishing-website-detector](https://github.com/LuKresXD/phishing-website-detector)
