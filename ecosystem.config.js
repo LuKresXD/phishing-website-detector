@@ -4,6 +4,7 @@ module.exports = {
             name: 'phishing-detector-web',
             script: 'npm',
             args: 'start',
+            cwd: './',
             env: {
                 NODE_ENV: 'production',
                 PORT: 3001
@@ -18,6 +19,7 @@ module.exports = {
             name: 'phishing-detector-ml',
             script: './ml/start.sh',
             interpreter: 'bash',
+            cwd: './',
             env: {
                 PYTHONUNBUFFERED: 'true',
                 ML_SERVER_PORT: '5002',
