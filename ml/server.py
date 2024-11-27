@@ -3,6 +3,7 @@ import joblib
 import pandas as pd
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from urllib.parse import urlparse
 from preprocess import extract_features
 import logging
 
