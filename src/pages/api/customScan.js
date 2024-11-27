@@ -33,9 +33,9 @@ export default async function handler(req, res) {
         }
 
         try {
-            console.log(`Calling ML server at ${ML_SERVER_URL}/customScan`);
+            console.log(`Calling ML server at ${ML_SERVER_URL}/api/customScan`);
             // Call Python ML server
-            const mlResponse = await axios.post(`${ML_SERVER_URL}/customScan`, { url }, {
+            const mlResponse = await axios.post(`${ML_SERVER_URL}/api/customScan`, { url }, {
                 timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json'
