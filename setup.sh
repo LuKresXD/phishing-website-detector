@@ -13,7 +13,7 @@ source ml/venv/bin/activate
 # Install Python dependencies
 echo "Installing Python dependencies..."
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r ml/requirements.txt
 
 # Create required ML directories
 mkdir -p ml/data
