@@ -11,19 +11,19 @@ module.exports = {
             },
             exp_backoff_restart_delay: 100,
             max_restarts: 10,
-            error_file: 'logs/web-err.log',
-            out_file: 'logs/web-out.log',
+            error_file: 'logs/ml-err.log',
+            out_file: 'logs/ml-out.log',
             time: true
         },
         {
             name: 'phishing-detector-ml',
-            script: 'python3',
-            args: 'ml/server.py',
-            interpreter: 'python3',
+            script: 'ml/server.py',
+            interpreter: './ml/venv/bin/python3',
             cwd: './',
             env: {
                 PYTHONUNBUFFERED: 'true',
-                ML_SERVER_PORT: '5002'
+                ML_SERVER_PORT: '5002',
+                PYTHONPATH: './ml'
             },
             exp_backoff_restart_delay: 100,
             max_restarts: 10,
