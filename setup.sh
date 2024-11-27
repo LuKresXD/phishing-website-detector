@@ -3,9 +3,21 @@
 # Create logs directory
 mkdir -p logs
 
+# Setup Python virtual environment
+echo "Setting up Python virtual environment..."
+python3 -m venv ml/venv
+
+# Activate virtual environment
+source ml/venv/bin/activate
+
 # Install Python dependencies
 echo "Installing Python dependencies..."
-python3 -m pip install --user pandas numpy flask flask-cors scikit-learn joblib requests imbalance-learn
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Create required ML directories
+mkdir -p ml/data
+mkdir -p ml/models
 
 # Install Node.js dependencies
 echo "Installing Node.js dependencies..."
@@ -15,12 +27,10 @@ npm install
 echo "Building Next.js application..."
 npm run build
 
-# Create required ML directories
-mkdir -p ml/data
-mkdir -p ml/models
-
 # Start PM2 with ecosystem file
 echo "Starting PM2 services..."
+pm2 stop phishing-detector-ml
+pm2 stop phishing-detector-web
 pm2 start ecosystem.config.js
 
 # Save PM2 configuration
@@ -30,6 +40,9 @@ pm2 save
 # Setup PM2 startup script
 echo "Setting up PM2 startup..."
 pm2 startup
+
+# Deactivate virtual environment
+deactivate
 
 echo "Setup complete!"
 echo "Monitor your applications with: pm2 monit"
