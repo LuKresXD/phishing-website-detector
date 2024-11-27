@@ -5,7 +5,7 @@ mkdir -p logs
 
 # Setup Python virtual environment
 echo "Setting up Python virtual environment..."
-python3 -m venv ml/venv
+python3.11 -m venv ml/venv
 
 # Activate virtual environment
 source ml/venv/bin/activate
