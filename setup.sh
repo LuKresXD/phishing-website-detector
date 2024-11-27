@@ -15,7 +15,7 @@ python3 -m venv venv
 # Install Python dependencies
 echo "Installing Python dependencies..."
 pip install -U pip
-pip install pandas numpy flask flask-cors scikit-learn joblib requests imbalanced-learn
+pip install -r requirements.txt
 
 # Deactivate virtual environment
 deactivate
