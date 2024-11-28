@@ -55,7 +55,7 @@ const ModelInfo = () => {
                     </div>
 
                     <p className="text-blue-100/80 leading-relaxed">
-                        Leverages VirusTotal's powerful API to aggregate results from multiple antivirus
+                        Leverages VirusTotal&apos;s powerful API to aggregate results from multiple antivirus
                         engines and website scanners, providing comprehensive threat detection.
                     </p>
 
@@ -119,7 +119,7 @@ const ModelInfo = () => {
                         Combined Strength
                     </h4>
                     <p className="text-blue-100/80">
-                        By combining VirusTotal's extensive database with our custom ML model,
+                        By combining VirusTotal&apos;s extensive database with our custom ML model,
                         we provide highly accurate phishing detection while minimizing false positives.
                         This dual approach ensures comprehensive protection against both known and emerging threats.
                     </p>
