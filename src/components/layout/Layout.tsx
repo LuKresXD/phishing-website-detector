@@ -10,7 +10,7 @@ interface LayoutProps {
 
 export default function Layout({
                                    children,
-                                   title = 'Phishing Website Detector 🕵️‍📡',
+                                   title = 'Phishing Website Detector 🕵️‍',
                                    description = 'Check if a website is safe or a phishing attempt'
                                }: LayoutProps) {
     return (
