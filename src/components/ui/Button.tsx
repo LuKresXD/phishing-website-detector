@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, MotionProps } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -45,7 +45,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                 ${className}
             `}
             disabled={disabled || isLoading}
-            {...props}
+            {...(props as MotionProps)} // Explicit cast to MotionProps
         >
             {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
