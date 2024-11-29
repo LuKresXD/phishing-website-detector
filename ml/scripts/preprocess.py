@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from sklearn.preprocessing import StandardScaler
 import joblib
 from tqdm import tqdm
+import os
 
 # Suppress specific warnings
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
@@ -30,9 +31,6 @@ def is_ip(address):
         return 1
     except:
         return 0
-
-def url_length(url):
-    return len(url)
 
 def is_shortened(url):
     shortening_services = r'(bit\.ly|goo\.gl|shorte\.st|go2l\.ink|x\.co|ow\.ly|'
@@ -215,7 +213,6 @@ def extract_features(row):
         domain = parsed.netloc
 
         features['using_ip'] = is_ip(domain)
-        features['url_length'] = url_length(url)
         features['shortened_url'] = is_shortened(url)
         features['at_symbol'] = has_at_symbol(url)
         features['double_slash_redirect'] = double_slash_redirect(url)
@@ -234,7 +231,7 @@ def extract_features(row):
     except Exception:
         # Error handling for invalid URLs or failed feature extraction
         features = {key: -1 for key in [
-            'using_ip', 'url_length', 'shortened_url', 'at_symbol',
+            'using_ip', 'shortened_url', 'at_symbol',
             'double_slash_redirect', 'prefix_suffix', 'sub_domains', 'special_chars',
             'https', 'domain_length', 'suspicious_tld', 'entropy',
             'domain_registration_length', 'dns_record', 'favicon', 'request_url',

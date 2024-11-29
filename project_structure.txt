@@ -5,23 +5,10 @@
 ├── .eslintrc.json
 ├── .gitignore
 ├── README.md
-├── data
-├── docs
-│   ├── .DS_Store
-│   ├── assets
-│   │   ├── .DS_Store
-│   │   ├── confusion_matrix.png
-│   │   ├── feature_importance.csv
-│   │   ├── feature_importance.png
-│   │   ├── feature_importance_all.png
-│   │   ├── misclassified_samples.csv
-│   │   ├── precision_recall_curve.png
-│   │   └── roc_curve.png
-│   └── metrics.json
+├── database.sqlite
 ├── ecosystem.config.js
 ├── lib
 │   └── db.js
-├── logs
 ├── ml
 │   ├── .DS_Store
 │   ├── README.md
@@ -29,26 +16,40 @@
 │   │   ├── preprocess.cpython-311.pyc
 │   │   └── train.cpython-311.pyc
 │   ├── data
-│   │   ├── PhiUSIIL_Phishing_URL_Dataset.csv
-│   │   ├── test.csv
-│   │   ├── test_processed.csv
-│   │   ├── train.csv
-│   │   ├── train_processed.csv
-│   │   ├── val.csv
-│   │   └── val_processed.csv
-│   ├── evaluate.py
-│   ├── fetch_dataset.py
+│   │   ├── processed
+│   │   │   ├── combined_processed.csv
+│   │   │   ├── legitimate_extra.csv
+│   │   │   ├── phishing_extra.csv
+│   │   │   ├── test.csv
+│   │   │   ├── test_processed.csv
+│   │   │   ├── train.csv
+│   │   │   ├── train_processed.csv
+│   │   │   ├── val.csv
+│   │   │   └── val_processed.csv
+│   │   └── raw
+│   │       └── PhiUSIIL_Phishing_URL_Dataset.csv
+│   ├── docs
+│   │   └── assets
+│   │       ├── confusion_matrix.png
+│   │       ├── feature_importance.png
+│   │       ├── metrics.json
+│   │       ├── misclassified_samples.csv
+│   │       ├── precision_recall_curve.png
+│   │       ├── roc_curve.png
+│   │       └── top_10_features.png
 │   ├── models
-│   │   ├── logistic_model.joblib
-│   │   ├── scaler_mean.csv
-│   │   └── scaler_std.csv
-│   ├── notebooks
-│   ├── preprocess.py
+│   │   ├── logistic_model.pkl
+│   │   └── scaler.pkl
 │   ├── requirements.txt
-│   ├── server.py
-│   ├── src
-│   ├── test_model.py
-│   └── train.py
+│   └── scripts
+│       ├── __pycache__
+│       │   └── preprocess.cpython-311.pyc
+│       ├── evaluate.py
+│       ├── fetch_dataset.py
+│       ├── preprocess.py
+│       ├── server.py
+│       ├── test_model.py
+│       └── train.py
 ├── models
 │   └── Scan.js
 ├── next-env.d.ts
@@ -69,8 +70,21 @@
 │   ├── .DS_Store
 │   ├── components
 │   │   ├── ErrorMessage.tsx
+│   │   ├── ModelInfo.tsx
 │   │   ├── Navbar.tsx
-│   │   └── Toast.tsx
+│   │   ├── ResultsDisplay.tsx
+│   │   ├── ScanResultCard.tsx
+│   │   ├── Toast.tsx
+│   │   ├── UrlScanner.tsx
+│   │   ├── layout
+│   │   │   └── Layout.tsx
+│   │   └── ui
+│   │       ├── Button.tsx
+│   │       ├── Card.tsx
+│   │       ├── ErrorDisplay.tsx
+│   │       ├── Input.tsx
+│   │       ├── LoadingSpinner.tsx
+│   │       └── Progress.tsx
 │   ├── hooks
 │   │   └── useUrlValidation.ts
 │   ├── pages
@@ -98,4 +112,4 @@
 └── typings
     └── index.d.ts
 
-23 directories, 76 files
+25 directories, 88 files

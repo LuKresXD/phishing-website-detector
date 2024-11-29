@@ -1,135 +1,131 @@
 {
     "classification_report": {
         "0": {
-            "precision": 0.8822412155745489,
-            "recall": 0.929,
-            "f1-score": 0.905017048222114,
+            "precision": 0.8246235606731621,
+            "recall": 0.931,
+            "f1-score": 0.8745890089243777,
             "support": 1000
         },
         "1": {
-            "precision": 0.925026399155227,
-            "recall": 0.876,
-            "f1-score": 0.8998459167950694,
+            "precision": 0.9207807118254879,
+            "recall": 0.802,
+            "f1-score": 0.8572955638695884,
             "support": 1000
         },
-        "accuracy": 0.9025,
+        "accuracy": 0.8665,
         "macro avg": {
-            "precision": 0.903633807364888,
-            "recall": 0.9025000000000001,
-            "f1-score": 0.9024314825085917,
+            "precision": 0.872702136249325,
+            "recall": 0.8665,
+            "f1-score": 0.865942286396983,
             "support": 2000
         },
         "weighted avg": {
-            "precision": 0.903633807364888,
-            "recall": 0.9025,
-            "f1-score": 0.9024314825085916,
+            "precision": 0.8727021362493251,
+            "recall": 0.8665,
+            "f1-score": 0.865942286396983,
             "support": 2000
         }
     },
     "confusion_matrix": [
         [
-            929,
-            71
+            931,
+            69
         ],
         [
-            124,
-            876
+            198,
+            802
         ]
     ],
-    "roc_auc": 0.9616515,
-    "average_precision": 0.9538947623350841,
+    "roc_auc": 0.959152,
+    "average_precision": 0.9554980792110693,
     "feature_importance": [
         {
-            "Feature": "url_length",
-            "Coefficient": -12.200193258072808
-        },
-        {
             "Feature": "https",
-            "Coefficient": 4.632770981106307
-        },
-        {
-            "Feature": "domain_length",
-            "Coefficient": 1.9097103877719988
-        },
-        {
-            "Feature": "domain_registration_length",
-            "Coefficient": 1.2741815451438063
-        },
-        {
-            "Feature": "dns_record",
-            "Coefficient": 1.0295134781615838
-        },
-        {
-            "Feature": "server_form_handler",
-            "Coefficient": 0.798541010534362
-        },
-        {
-            "Feature": "links_in_scripts",
-            "Coefficient": 0.6923412182614465
-        },
-        {
-            "Feature": "sub_domains",
-            "Coefficient": 0.6011517365824024
-        },
-        {
-            "Feature": "iframe_redirection",
-            "Coefficient": 0.47709937972031785
-        },
-        {
-            "Feature": "prefix_suffix",
-            "Coefficient": -0.47056802097879163
-        },
-        {
-            "Feature": "suspicious_tld",
-            "Coefficient": -0.3630580164402625
-        },
-        {
-            "Feature": "status_bar_customization",
-            "Coefficient": 0.3523501903764502
-        },
-        {
-            "Feature": "anchor_url",
-            "Coefficient": -0.34284616981235044
-        },
-        {
-            "Feature": "entropy",
-            "Coefficient": -0.3187015077388051
-        },
-        {
-            "Feature": "website_forwarding",
-            "Coefficient": -0.2808314610335151
-        },
-        {
-            "Feature": "request_url",
-            "Coefficient": -0.13691169368542638
+            "Coefficient": 4.155205356647961
         },
         {
             "Feature": "special_chars",
-            "Coefficient": -0.11063965503829745
+            "Coefficient": -3.899760112603124
         },
         {
-            "Feature": "disable_right_click",
-            "Coefficient": 0.06454750168186373
+            "Feature": "domain_registration_length",
+            "Coefficient": 1.2438533476289937
         },
         {
-            "Feature": "at_symbol",
-            "Coefficient": -0.03957105869870427
+            "Feature": "domain_length",
+            "Coefficient": -0.9663930973551308
         },
         {
-            "Feature": "favicon",
-            "Coefficient": 0.032534613529303896
+            "Feature": "dns_record",
+            "Coefficient": 0.918586984529548
         },
         {
-            "Feature": "shortened_url",
-            "Coefficient": 0.025844911162568818
+            "Feature": "sub_domains",
+            "Coefficient": 0.8483248540368175
         },
         {
-            "Feature": "using_ip",
-            "Coefficient": -0.023732867299451198
+            "Feature": "server_form_handler",
+            "Coefficient": 0.8268880785030297
+        },
+        {
+            "Feature": "links_in_scripts",
+            "Coefficient": 0.510003504490182
+        },
+        {
+            "Feature": "prefix_suffix",
+            "Coefficient": -0.5038444704341462
+        },
+        {
+            "Feature": "iframe_redirection",
+            "Coefficient": 0.4873177073228751
         },
         {
             "Feature": "double_slash_redirect",
-            "Coefficient": -0.009602639705680633
+            "Coefficient": -0.4693013146162244
+        },
+        {
+            "Feature": "status_bar_customization",
+            "Coefficient": 0.4286418022780973
+        },
+        {
+            "Feature": "anchor_url",
+            "Coefficient": -0.3937646297356586
+        },
+        {
+            "Feature": "at_symbol",
+            "Coefficient": -0.31213818445651614
+        },
+        {
+            "Feature": "suspicious_tld",
+            "Coefficient": -0.29011948682958677
+        },
+        {
+            "Feature": "website_forwarding",
+            "Coefficient": -0.25842726854918374
+        },
+        {
+            "Feature": "entropy",
+            "Coefficient": -0.22103173182869557
+        },
+        {
+            "Feature": "request_url",
+            "Coefficient": 0.19551721760847532
+        },
+        {
+            "Feature": "favicon",
+            "Coefficient": -0.167061344251264
+        },
+        {
+            "Feature": "disable_right_click",
+            "Coefficient": 0.06797695681576178
+        },
+        {
+            "Feature": "using_ip",
+            "Coefficient": -0.03762606601596
+        },
+        {
+            "Feature": "shortened_url",
+            "Coefficient": -0.0006045584080078054
         }
     ],
     "class_distribution": {
