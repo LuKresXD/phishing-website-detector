@@ -6,47 +6,47 @@ This directory contains the machine learning component of the Phishing Website D
 
 Based on our evaluation metrics, the model demonstrates strong performance in phishing detection:
 
-- **Accuracy**: 93.1%
-- **ROC AUC**: 0.968 (for both classes)
+- **Accuracy**: 90.25%
+- **ROC AUC**: 0.962
 
 ### Detailed Metrics
 
-| Class      | Precision | Recall | F1-Score |
-|------------|-----------|--------|----------|
-| Legitimate | 0.960     | 0.900  | 0.929    |
-| Phishing   | 0.906     | 0.963  | 0.933    |
+| Class      | Precision | Recall | F1-Score | Support |
+|------------|-----------|--------|----------|---------|
+| Legitimate | 0.882     | 0.929  | 0.905    | 1000    |
+| Phishing   | 0.925     | 0.876  | 0.900    | 1000    |
 
 ### Visualization of Results
 
 #### Confusion Matrix
-![Confusion Matrix](../docs/assets/confusion_matrix.png)
+![Confusion Matrix](docs/assets/confusion_matrix.png)
 
 #### ROC Curve
-![ROC Curve](../docs/assets/roc_curve.png)
+![ROC Curve](docs/assets/roc_curve.png)
 
 #### Precision-Recall Curve
-![Precision-Recall Curve](../docs/assets/precision_recall_curve.png)
+![Precision-Recall Curve](docs/assets/precision_recall_curve.png)
 
 ## 🔍 Feature Analysis
 
 The model utilizes a carefully selected set of features extracted from URLs and domain names. Here are the top 10 most important features based on absolute coefficient values:
 
-1. **HTTPS Protocol** (4.450)
-2. **URL Length** (3.199)
-3. **Prefix-Suffix in Domain Name** (0.908)
-4. **DNS Record** (0.900)
-5. **Links in Scripts** (0.888)
-6. **Entropy** (0.831)
-7. **Favicon** (0.682)
-8. **Suspicious TLD** (0.620)
-9. **"@" Symbol in URL** (0.610)
-10. **Subdomains** (0.609)
+1. **URL Length** (-12.200)
+2. **HTTPS** (4.633)
+3. **Domain Length** (1.910)
+4. **Domain Registration Length** (1.274)
+5. **DNS Record** (1.030)
+6. **Server Form Handler** (0.799)
+7. **Links in Scripts** (0.692)
+8. **Subdomains** (0.601)
+9. **Iframe Redirection** (0.477)
+10. **Prefix-Suffix in Domain Name** (-0.471)
 
 ### Feature Importance Visualization
-![Feature Importance](../docs/assets/feature_importance.png)
+![Feature Importance](docs/assets/top_10_features.png)
 
 For a complete view of all features:
-![All Features Importance](../docs/assets/feature_importance_all.png)
+![All Features Importance](docs/assets/feature_importance.png)
 
 ## 💻 Components
 

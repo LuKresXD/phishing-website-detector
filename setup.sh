@@ -3,9 +3,6 @@
 # Get the absolute path of the project directory
 PROJECT_DIR=$(pwd)
 
-# Create logs directory
-mkdir -p logs
-
 # Set up Python virtual environment
 echo "Setting up Python virtual environment..."
 cd ml
@@ -30,10 +27,6 @@ npm install
 # Build Next.js application
 echo "Building Next.js application..."
 npm run build
-
-# Create required ML directories
-mkdir -p ml/data
-mkdir -p ml/models
 
 # Update PM2 ecosystem file to use the virtual environment
 cat > ecosystem.config.js << EOL

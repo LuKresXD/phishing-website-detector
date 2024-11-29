@@ -7,8 +7,8 @@ INPUT_FILE = "ml/data/PhiUSIIL_Phishing_URL_Dataset.csv"  # Replace this with yo
 OUTPUT_DIR = "ml/data"
 
 # Configurable number of URLs
-PHISHING_LIMIT = 100  # Set the desired number of phishing URLs
-LEGITIMATE_LIMIT = 100  # Set the desired number of legitimate URLs
+PHISHING_LIMIT = 5000  # Set the desired number of phishing URLs
+LEGITIMATE_LIMIT = 5000  # Set the desired number of legitimate URLs
 
 def prepare_dataset():
     if not os.path.exists(INPUT_FILE):

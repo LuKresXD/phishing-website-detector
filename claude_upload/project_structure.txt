@@ -6,6 +6,7 @@
 ├── .gitignore
 ├── README.md
 ├── data
+├── database.sqlite
 ├── docs
 │   ├── .DS_Store
 │   ├── assets
@@ -69,10 +70,26 @@
 │   ├── .DS_Store
 │   ├── components
 │   │   ├── ErrorMessage.tsx
+│   │   ├── ModelInfo.tsx
 │   │   ├── Navbar.tsx
-│   │   └── Toast.tsx
+│   │   ├── ResultsDisplay.tsx
+│   │   ├── ScanResultCard.tsx
+│   │   ├── Toast.tsx
+│   │   ├── UrlScanner.tsx
+│   │   ├── layout
+│   │   │   └── Layout.tsx
+│   │   └── ui
+│   │       ├── Button.tsx
+│   │       ├── Card.tsx
+│   │       ├── ErrorDisplay.tsx
+│   │       ├── Input.tsx
+│   │       ├── LoadingSpinner.tsx
+│   │       └── Progress.tsx
+│   ├── config
+│   ├── constants
 │   ├── hooks
 │   │   └── useUrlValidation.ts
+│   ├── models
 │   ├── pages
 │   │   ├── _app.tsx
 │   │   ├── _document.tsx
@@ -85,8 +102,10 @@
 │   │   │   └── saveScan.js
 │   │   ├── history.tsx
 │   │   └── index.tsx
+│   ├── services
 │   ├── styles
 │   │   └── globals.css
+│   ├── types
 │   └── utils
 │       ├── api.ts
 │       ├── featureExtractor.js
@@ -98,4 +117,4 @@
 └── typings
     └── index.d.ts
 
-23 directories, 76 files
+30 directories, 88 files

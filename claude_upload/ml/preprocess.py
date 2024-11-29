@@ -4,25 +4,19 @@ import re
 from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
-import socket
-import whois
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 import time
 from functools import lru_cache
 import dns.resolver
 import tldextract
 import warnings
 from urllib3.exceptions import InsecureRequestWarning
-import signal
-from contextlib import contextmanager
-import threading
-import _thread
-import urllib3
+import concurrent.futures
 from typing import Optional, Dict, Union, List
 
 # Suppress SSL warnings
 warnings.filterwarnings('ignore', category=InsecureRequestWarning)
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # Constants
 PHISHING_KEYWORDS = ["login", "verify", "secure", "account", "banking", "confirm", "password", "pay"]
@@ -32,20 +26,6 @@ SHORTENING_SERVICES = [
     'tr.im', 'is.gd', 'cli.gs', 'yfrog.com', 'migre.me', 'ff.im', 'tiny.cc', 'url4.eu',
     'twit.ac', 'su.pr', 'twurl.nl', 'snipurl.com', 'short.to', 'BudURL.com', 'ping.fm'
 ]
-
-class TimeoutException(Exception):
-    pass
-
-@contextmanager
-def timeout(seconds: int):
-    timer = threading.Timer(seconds, lambda: _thread.interrupt_main())
-    timer.start()
-    try:
-        yield
-    except KeyboardInterrupt:
-        raise TimeoutException(f"Operation timed out after {seconds} seconds")
-    finally:
-        timer.cancel()
 
 def shannon_entropy(s: str) -> float:
     if not s:
@@ -60,64 +40,30 @@ def check_dns_record(domain: str) -> bool:
                 dns.resolver.resolve(domain, record_type)
                 return True
             except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN,
-                   dns.resolver.NoNameservers, dns.exception.Timeout):
+                    dns.resolver.NoNameservers, dns.exception.Timeout):
                 continue
         return False
-    except Exception as e:
-        print(f"DNS lookup error for {domain}: {str(e)}")
+    except Exception:
         return False
 
 @lru_cache(maxsize=1000)
-def get_whois_info(domain: str, timeout_seconds: int = 4) -> Optional[whois.parser.WhoisEntry]:
+def get_whois_info(domain: str) -> Optional[dict]:
     try:
-        with timeout(timeout_seconds):
-            clean_domain = domain.strip().lower()
-            if not clean_domain:
-                return None
-
-            if '://' in clean_domain:
-                clean_domain = clean_domain.split('://')[-1].split('/')[0]
-
-            extracted = tldextract.extract(clean_domain)
-            if not extracted.domain or not extracted.suffix:
-                return None
-
-            base_domain = f"{extracted.domain}.{extracted.suffix}"
-            w = whois.whois(base_domain)
-
-            if w and (w.domain_name or w.creation_date or w.expiration_date):
-                return w
-
-    except TimeoutException:
-        print(f"WHOIS lookup timed out for domain: {domain}")
-    except Exception as e:
-        print(f"WHOIS lookup failed for {domain}: {str(e)}")
-
-    return None
-
-def parse_date(date_obj: Union[str, datetime, date, list]) -> Optional[date]:
-    if not date_obj:
+        extracted = tldextract.extract(domain)
+        if not extracted.domain or not extracted.suffix:
+            return None
+        base_domain = f"{extracted.domain}.{extracted.suffix}"
+        w = whois.whois(base_domain)
+        return w if (w.domain_name or w.creation_date or w.expiration_date) else None
+    except Exception:
         return None
 
-    try:
-        if isinstance(date_obj, list):
-            date_obj = date_obj[0]
-
-        if isinstance(date_obj, str):
-            try:
-                return datetime.strptime(date_obj, "%Y-%m-%d").date()
-            except ValueError:
-                # Try parsing with dateutil as fallback
-                from dateutil import parser
-                return parser.parse(date_obj).date()
-        elif isinstance(date_obj, datetime):
-            return date_obj.date()
-        elif isinstance(date_obj, date):
-            return date_obj
-
-    except Exception as e:
-        print(f"Date parsing error: {str(e)}")
-
+def parse_date_safe(date_field):
+    """Safely parse a WHOIS date field, handling lists and single datetime objects."""
+    if isinstance(date_field, list):
+        return date_field[0] if date_field else None
+    if isinstance(date_field, datetime):
+        return date_field
     return None
 
 def extract_features(url: str) -> Dict[str, Union[int, float]]:
@@ -169,8 +115,8 @@ def extract_features(url: str) -> Dict[str, Union[int, float]]:
         dot_count = len(re.findall(r"\.", netloc))
         features["sub_domains"] = 1 if dot_count == 1 else (0 if dot_count == 2 else -1)
 
-        # 8. HTTPS
-        features["https"] = 1 if parsed.scheme == 'https' else -1
+        # 8. HTTPS - FIXED: Now -1 for HTTP and 1 for HTTPS
+        features["https"] = -1 if parsed.scheme == 'http' else 1
 
         # 9. Domain Registration Length
         if whois_response and whois_response.creation_date and whois_response.expiration_date:
@@ -191,8 +137,8 @@ def extract_features(url: str) -> Dict[str, Union[int, float]]:
         standard_ports = ['80', '443', '']
         features["non_standard_port"] = -1 if parsed.port and str(parsed.port) not in standard_ports else 1
 
-        # 12. HTTPS in Domain
-        features["https_domain"] = -1 if 'https' in domain or 'http' in domain else 1
+        # 12. HTTPS in Domain - IMPROVED: Check for misleading HTTPS in domain
+        features["https_domain"] = -1 if ('https' in domain or 'http' in domain) else 1
 
         # 13. Request URL
         if soup:
@@ -234,7 +180,7 @@ def extract_features(url: str) -> Dict[str, Union[int, float]]:
         if soup:
             forms = soup.find_all('form', action=True)
             features["server_form_handler"] = -1 if any(not form['action'] or 'about:blank' in form['action']
-                                                      for form in forms) else 1
+                                                    for form in forms) else 1
         else:
             features["server_form_handler"] = 0
 
@@ -260,7 +206,7 @@ def extract_features(url: str) -> Dict[str, Union[int, float]]:
         # 21. Disable Right Click
         if soup:
             features["disable_right_click"] = -1 if soup.find_all('script',
-                string=re.compile('event.button ?== ?2')) else 1
+               string=re.compile('event.button ?=== ?2')) else 1
         else:
             features["disable_right_click"] = 0
 
@@ -325,156 +271,53 @@ def extract_features(url: str) -> Dict[str, Union[int, float]]:
 
     return features
 
-def extract_features_with_timeout(url: str, timeout_seconds: int = 4) -> Optional[Dict[str, Union[int, float]]]:
-    try:
-        start_time = time.time()
-        features = extract_features(url)
+def extract_features_parallel(urls: List[str], max_workers: int = 100) -> List[Dict[str, Union[int, float]]]:
+    total_urls = len(urls)
+    progress = [0]
 
-        if time.time() - start_time > timeout_seconds:
-            print(f"Processing timed out for URL: {url}")
-            return None
+    def process_url(url):
+        nonlocal progress
+        result = extract_features(url)
+        progress[0] += 1
+        percent_done = (progress[0] / total_urls) * 100
+        print(f"\rProgress: {percent_done:.2f}% ({progress[0]}/{total_urls})", end="")
+        return result
 
-        return features
-    except Exception as e:
-        print(f"Error processing URL {url}: {str(e)}")
-        return None
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        results = list(executor.map(process_url, urls))
+
+    print("\n")  # New line after progress completion
+    return results
 
 def preprocess_dataset(input_file: str, output_file: str, save_scaler: bool = False) -> None:
-    print(f"\nProcessing dataset: {input_file}")
-
+    print(f"Processing dataset: {input_file}")
     try:
-        # Load dataset
         df = pd.read_csv(input_file)
-        total_urls = len(df)
-        print(f"Loaded {total_urls} URLs from dataset")
+        print(f"Loaded {len(df)} URLs from dataset")
 
-        # Extract features
-        print("\nExtracting features...")
-        features_list = []
-        skipped_urls = []
-        last_percent = -1
-
-        for idx, url in enumerate(df["url"]):
-            # Calculate current percentage
-            current_percent = int((idx / total_urls) * 100)
-
-            # Only print if percentage has changed
-            if current_percent > last_percent:
-                print(f"Progress: {current_percent}% [{idx}/{total_urls}] (Skipped: {len(skipped_urls)})", end='\r')
-                last_percent = current_percent
-
-            # Extract features with timeout
-            features = extract_features_with_timeout(url)
-
-            if features is None:
-                skipped_urls.append((idx, url))
-                # Create default features for skipped URLs
-                features = {feature: 0 for feature in [
-                    "using_ip", "url_length", "shortened_url", "at_symbol",
-                    "double_slash_redirect", "prefix_suffix", "sub_domains", "https",
-                    "domain_registration_length", "favicon", "non_standard_port",
-                    "https_domain", "request_url", "anchor_url", "links_in_scripts",
-                    "server_form_handler", "info_email", "abnormal_url",
-                    "website_forwarding", "status_bar_customization", "disable_right_click",
-                    "popup_window", "iframe_redirection", "age_of_domain", "dns_record",
-                    "links_pointing_to_page", "statistical_report", "domain_length",
-                    "entropy", "special_chars", "suspicious_tld"
-                ]}
-
-            features_list.append(features)
-
-        # Print final progress and statistics
-        print(f"\nProgress: 100% [{total_urls}/{total_urls}] (Skipped: {len(skipped_urls)})")
-        print(f"Feature extraction complete!")
-
-        if skipped_urls:
-            print("\nSkipped URLs:")
-            print(f"Total skipped: {len(skipped_urls)} ({(len(skipped_urls)/total_urls)*100:.2f}%)")
-            if len(skipped_urls) > 0:
-                print("First 5 skipped URLs:")
-                for idx, url in skipped_urls[:5]:
-                    print(f"Index {idx}: {url}")
-                if len(skipped_urls) > 5:
-                    print(f"... and {len(skipped_urls) - 5} more")
-
-        # Convert to DataFrame
+        features_list = extract_features_parallel(df["url"].tolist())
         features_df = pd.DataFrame(features_list)
 
-        # Handle normalization
         if save_scaler:
-            print("\nCalculating and saving scaling parameters...")
             scaler_mean = features_df.mean()
-            scaler_std = features_df.std()
-
-            # Replace zero standard deviations with 1
-            scaler_std = scaler_std.replace(0, 1)
-
-            # Save scaling parameters
+            scaler_std = features_df.std().replace(0, 1)
             scaler_mean.to_csv("ml/models/scaler_mean.csv")
             scaler_std.to_csv("ml/models/scaler_std.csv")
-            print("Scaler parameters saved successfully")
         else:
-            print("\nLoading existing scaling parameters...")
-            try:
-                scaler_mean = pd.read_csv("ml/models/scaler_mean.csv", index_col=0).squeeze("columns")
-                scaler_std = pd.read_csv("ml/models/scaler_std.csv", index_col=0).squeeze("columns")
-            except FileNotFoundError:
-                raise Exception("Scaling parameters not found. Please run with save_scaler=True first.")
+            scaler_mean = pd.read_csv("ml/models/scaler_mean.csv", index_col=0).squeeze()
+            scaler_std = pd.read_csv("ml/models/scaler_std.csv", index_col=0).squeeze()
 
-        # Apply normalization
-        print("Normalizing features...")
         features_normalized = (features_df - scaler_mean) / scaler_std
-        features_normalized = features_normalized.fillna(0)
-
-        # Add label column
         processed = pd.concat([features_normalized, df["label"]], axis=1)
-
-        # Save processed dataset
-        print(f"\nSaving processed dataset to {output_file}")
         processed.to_csv(output_file, index=False)
 
-        # Print feature statistics
-        print("\nFeature Statistics:")
-        print(f"Number of features: {len(features_normalized.columns)}")
-        print(f"Total URLs processed: {total_urls}")
-        print(f"Successfully processed: {total_urls - len(skipped_urls)}")
-        print(f"Skipped URLs: {len(skipped_urls)}")
-        print(f"Success rate: {((total_urls - len(skipped_urls)) / total_urls) * 100:.2f}%")
-
-        # Print feature value ranges
-        print("\nFeature Value Ranges:")
-        stats_df = features_normalized.describe()
-        print(stats_df.round(3))
-
-        print(f"\nProcessing complete for {input_file}!")
+        print(f"Saved processed dataset to {output_file}")
 
     except Exception as e:
-        print(f"\nError during dataset preprocessing: {str(e)}")
+        print(f"Error during preprocessing: {str(e)}")
         raise
 
 if __name__ == "__main__":
-    try:
-        print("Starting preprocessing pipeline...")
-        print("=" * 60)
-
-        start_time = time.time()
-
-        print("\nProcessing training dataset...")
-        preprocess_dataset("ml/data/train.csv", "ml/data/train_processed.csv", save_scaler=True)
-
-        print("\nProcessing validation dataset...")
-        preprocess_dataset("ml/data/val.csv", "ml/data/val_processed.csv")
-
-        print("\nProcessing test dataset...")
-        preprocess_dataset("ml/data/test.csv", "ml/data/test_processed.csv")
-
-        end_time = time.time()
-        processing_time = end_time - start_time
-
-        print("\nPreprocessing pipeline completed successfully!")
-        print(f"Total processing time: {processing_time:.2f} seconds")
-        print("=" * 60)
-
-    except Exception as e:
-        print(f"\nError in preprocessing pipeline: {str(e)}")
-        raise
+    preprocess_dataset("ml/data/train.csv", "ml/data/train_processed.csv", save_scaler=True)
+    preprocess_dataset("ml/data/val.csv", "ml/data/val_processed.csv")
+    preprocess_dataset("ml/data/test.csv", "ml/data/test_processed.csv")
