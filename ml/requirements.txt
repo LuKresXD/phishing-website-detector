@@ -1,4 +1,4 @@
-pandas==2.0.0
+pandas==2.1.0
 numpy>=1.24.2
 scikit-learn==1.2.2
 imbalanced-learn==0.10.1
