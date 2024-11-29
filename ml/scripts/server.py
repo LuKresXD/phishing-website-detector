@@ -16,8 +16,8 @@ cors_origins = ['https://phishing.lukres.dev', 'http://localhost:3001']
 CORS(app, resources={r"/api/*": {"origins": cors_origins}})
 
 # Load scaler and model at startup
-model_path = 'logistic_model.pkl'
-scaler_path = 'scaler.pkl'
+model_path = '../models/logistic_model.pkl'
+scaler_path = '../models/scaler.pkl'
 
 try:
     scaler = joblib.load(scaler_path)
