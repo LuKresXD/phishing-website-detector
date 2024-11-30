@@ -89,44 +89,47 @@ export default function Home() {
                 axios.post('/api/customScan', { url: finalUrl }, { timeout: 30000 })
             ]);
 
+            let vtScore = 100;
+            let vtResult = 'Safe';
+            let scannedUrl = finalUrl;
+
             // Process VirusTotal results
             if (vtScanId) {
-                const vtResult = await waitForAnalysisCompletion(vtScanId);
-                const vtScore = Math.max(
+                const vtResponse = await waitForAnalysisCompletion(vtScanId);
+                vtScore = Math.max(
                     Number(
-                        (100 - (vtResult.data.attributes.stats.malicious * 5 +
-                                vtResult.data.attributes.stats.suspicious * 3) / 92 * 100
+                        (100 - (vtResponse.data.attributes.stats.malicious * 5 +
+                                vtResponse.data.attributes.stats.suspicious * 3) / 92 * 100
                         ).toFixed(1)
                     ),
                     0.1
                 );
-
-                setScanState(prev => ({
-                    ...prev,
-                    virusTotalSafetyScore: vtScore,
-                    scannedUrl: vtResult.meta.url_info.url,
-                    virusTotalResult: vtScore < 50 ? 'Dangerous' : vtScore < 80 ? 'Moderate' : 'Safe'
-                }));
+                vtResult = vtScore < 50 ? 'Dangerous' : vtScore < 80 ? 'Moderate' : 'Safe';
+                scannedUrl = vtResponse.meta.url_info.url || finalUrl;
             }
 
             // Process custom model results
-            if (customResponse.data?.safetyScore !== undefined) {
-                const customSafetyScore = Math.max(0, Math.min(100, Number(customResponse.data.safetyScore)));
+            const customSafetyScore = customResponse.data?.safetyScore !== undefined
+                ? Math.max(0, Math.min(100, Number(customResponse.data.safetyScore)))
+                : 100;
+            const customResult = customResponse.data?.result || 'Safe';
 
-                setScanState(prev => ({
-                    ...prev,
-                    customSafetyScore: customSafetyScore,
-                    customResult: customResponse.data.result
-                }));
-            }
+            // Update state with results
+            setScanState({
+                virusTotalResult: vtResult,
+                customResult: customResult,
+                virusTotalSafetyScore: vtScore,
+                customSafetyScore: customSafetyScore,
+                scannedUrl: scannedUrl
+            });
 
             // Save scan history
             const scanData = {
-                url: finalUrl,
-                virusTotalResult: scanState.virusTotalResult,
-                customResult: customResponse.data.result,
-                virusTotalSafetyScore: scanState.virusTotalSafetyScore,
-                customSafetyScore: customResponse.data.safetyScore,
+                url: scannedUrl,
+                virusTotalResult: vtResult,
+                customResult: customResult,
+                virusTotalSafetyScore: vtScore,
+                customSafetyScore: customSafetyScore,
                 date: new Date().toISOString()
             };
             addScan(scanData);

@@ -9,19 +9,34 @@ export interface Scan {
 
 const STORAGE_KEY = 'scanHistory';
 
-export const saveScans = (scans: Scan[]): void => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(scans));
-};
-
 export const getScans = (): Scan[] => {
-    const scans = localStorage.getItem(STORAGE_KEY);
-    console.log('Raw scans from localStorage:', scans); // Отладочный вывод
-    return scans ? JSON.parse(scans) : [];
+    try {
+        const scans = localStorage.getItem(STORAGE_KEY);
+        return scans ? JSON.parse(scans) : [];
+    } catch (error) {
+        console.error('Error reading scan history:', error);
+        return [];
+    }
 };
 
 export const addScan = (scan: Scan): void => {
-    const scans = getScans();
-    scans.unshift(scan);
-    console.log('Scans after adding new scan:', scans); // Отладочный вывод
-    saveScans(scans);
+    try {
+        const scans = getScans();
+        scans.unshift(scan); // Add new scan at the beginning
+
+        // Keep only the last 100 scans to prevent storage issues
+        const trimmedScans = scans.slice(0, 100);
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmedScans));
+    } catch (error) {
+        console.error('Error saving scan:', error);
+    }
+};
+
+export const clearScans = (): void => {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+        console.error('Error clearing scan history:', error);
+    }
 };
