@@ -109,7 +109,9 @@ export default function Home() {
             }
 
             // Process custom model results
-            const customSafetyScore = customResponse.data.safetyScore;
+            const customSafetyScore = customResponse.data?.safety_score !== undefined
+                ? Math.max(0, Math.min(100, Number(customResponse.data.safety_score)))
+                : 100;
             const customResult = customResponse.data?.result || 'Safe';
 
             // Update state with results
