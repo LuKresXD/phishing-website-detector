@@ -11,10 +11,19 @@ import { addScan } from '@/utils/localStorageUtil';
 import ErrorDisplay from '@/components/ui/ErrorDisplay';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
+// Interface for the scan state
+interface ScanState {
+    virusTotalResult: string;
+    customResult: string;
+    virusTotalSafetyScore: number;
+    customSafetyScore: number;
+    scannedUrl: string;
+}
+
 export default function Home() {
     // State management
     const [isLoading, setIsLoading] = useState(false);
-    const [scanState, setScanState] = useState({
+    const [scanState, setScanState] = useState<ScanState>({
         virusTotalResult: 'Enter website',
         customResult: 'Enter website',
         virusTotalSafetyScore: 100,
@@ -31,11 +40,18 @@ export default function Home() {
 
     // API handlers
     const sendUrlToVirusTotal = async (url: string) => {
-        const response = await axios.post('/api/proxy', { url });
-        if (response.data?.data?.id) {
-            return response.data.data.id;
+        try {
+            const response = await axios.post('/api/proxy', { url });
+            if (response.data?.data?.id) {
+                return response.data.data.id;
+            }
+            throw new Error('Invalid response from VirusTotal API');
+        } catch (error: any) {
+            if (error.response?.status === 429) {
+                throw new Error('Rate limit exceeded. Please wait a moment before trying again.');
+            }
+            throw error;
         }
-        throw new Error('Invalid response from VirusTotal API');
     };
 
     const waitForAnalysisCompletion = async (analysisId: string) => {
@@ -94,10 +110,12 @@ export default function Home() {
             }
 
             // Process custom model results
-            if (customResponse.data?.safetyScore) {
+            if (customResponse.data?.safetyScore !== undefined) {
+                const customSafetyScore = Math.max(0, Math.min(100, Number(customResponse.data.safetyScore)));
+
                 setScanState(prev => ({
                     ...prev,
-                    customSafetyScore: customResponse.data.safetyScore,
+                    customSafetyScore: customSafetyScore,
                     customResult: customResponse.data.result
                 }));
             }
@@ -113,7 +131,7 @@ export default function Home() {
             };
             addScan(scanData);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error('Scan error:', error);
             setError(error instanceof Error ? error.message : 'An unexpected error occurred');
         } finally {
@@ -154,7 +172,7 @@ export default function Home() {
                     {/* Title with increased spacing */}
                     <h1 className='font-bold sm:text-6xl text-4xl font-poppins text-center text-text mt-8 mb-6'>
                         <span className="text-blue-500">Phishing</span>
-                        <span className="text-blue-100"> Website Detector 🕵️‍📡</span>
+                        <span className="text-blue-100"> Website Detector 🕵️‍</span>
                     </h1>
                     <p className='text-blue-100 text-lg text-center font-poppins mb-8'>
                         {inView && (
