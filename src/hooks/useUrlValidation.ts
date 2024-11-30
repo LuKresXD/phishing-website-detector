@@ -15,15 +15,15 @@ export function useUrlValidation(url: string) {
         // Strict URL pattern requiring http/https protocol
         const urlPattern = /^https?:\/\/(([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?(\/[-a-z0-9\._~:/?#[\]@!$&'()*+,;=%]*)?$/i;
 
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-            setIsValid(false);
-            setError('URL must start with http:// or https://');
-            return;
-        }
-
         if (!urlPattern.test(url)) {
             setIsValid(false);
             setError('Please enter a valid URL (e.g., https://example.com)');
+            return;
+        }
+
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            setIsValid(false);
+            setError('URL must start with http:// or https://');
             return;
         }
 
