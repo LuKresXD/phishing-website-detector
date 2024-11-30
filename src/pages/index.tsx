@@ -109,9 +109,7 @@ export default function Home() {
             }
 
             // Process custom model results
-            const customSafetyScore = customResponse.data?.safetyScore !== undefined
-                ? Math.max(0, Math.min(100, Number(customResponse.data.safetyScore)))
-                : 100;
+            const customSafetyScore = customResponse.data.safetyScore;
             const customResult = customResponse.data?.result || 'Safe';
 
             // Update state with results
@@ -154,18 +152,17 @@ export default function Home() {
                 {/* Clean loading overlay */}
                 {isLoading && (
                     <motion.div
-                        className="fixed inset-0 bg-black/50 z-50"
+                        className="fixed inset-0 z-50 flex items-center justify-center"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.2 }}
                     >
-                        <div className="flex items-center justify-center h-full">
-                            <div className="bg-zinc-900/80 rounded-lg p-8">
-                                <LoadingSpinner size="lg" />
-                                <p className="text-blue-100 mt-4 text-center font-poppins">
-                                    Scanning website...
-                                </p>
-                            </div>
+                        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+                        <div className="relative z-50 bg-zinc-900/90 rounded-lg p-8 border border-zinc-700/50 shadow-xl">
+                            <LoadingSpinner size="lg" />
+                            <p className="text-blue-100 mt-4 text-center font-poppins">
+                                Scanning website...
+                            </p>
                         </div>
                     </motion.div>
                 )}

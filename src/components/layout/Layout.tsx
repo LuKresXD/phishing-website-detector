@@ -23,11 +23,11 @@ export default function Layout({
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="icon" href="/detective.ico"/>
             </Head>
-
+            <div className='pattern-grid-lg text-primary'>
             <Navbar />
 
             <div className='flex flex-col min-h-screen justify-between'>
-                <main className='flex flex-col justify-center grow pattern-grid-lg text-primary overflow-x-hidden relative'>
+                <main className='flex flex-col justify-center grow text-primary overflow-x-hidden relative'>
                     {/* Smoothed background effects */}
                     <div className="fixed inset-0 z-0 overflow-hidden">
                         {/* Main centered gradient - smoother transition */}
@@ -64,6 +64,7 @@ export default function Layout({
                         phishing.lukres.dev - Made with NextJS, TailwindCSS, and ❤ by Luka
                     </h2>
                 </footer>
+            </div>
             </div>
 
             <style jsx global>{`
