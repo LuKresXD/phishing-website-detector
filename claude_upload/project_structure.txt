@@ -18,8 +18,6 @@
 │   ├── data
 │   │   ├── processed
 │   │   │   ├── combined_processed.csv
-│   │   │   ├── legitimate_extra.csv
-│   │   │   ├── phishing_extra.csv
 │   │   │   ├── test.csv
 │   │   │   ├── test_processed.csv
 │   │   │   ├── train.csv
@@ -112,4 +110,4 @@
 └── typings
     └── index.d.ts
 
-25 directories, 88 files
+25 directories, 86 files
