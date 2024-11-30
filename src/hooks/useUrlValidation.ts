@@ -13,11 +13,11 @@ export function useUrlValidation(url: string) {
         }
 
         // Strict URL pattern requiring http/https protocol
-        const urlPattern = /^https?:\/\/(([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?(\/[-a-z0-9\._~:/?#[\]@!$&'()*+,;=%]*)?$/i;
+        const urlPattern = /^(https?:\/\/)?(([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?(\/[-a-z0-9\._~:/?#[\]@!$&'()*+,;=%]*)?$/i;
 
         if (!urlPattern.test(url)) {
             setIsValid(false);
-            setError('Please enter a valid URL (e.g., https://example.com)');
+            setError('Please enter a valid URL (e.g., https://example.com or http://192.168.1.1)');
             return;
         }
 
