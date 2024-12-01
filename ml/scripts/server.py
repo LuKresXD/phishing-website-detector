@@ -70,7 +70,7 @@ def custom_scan():
         
         response = {
             'url': url,
-            'safetyScore': safetyScore,
+            'safetyScore': max(0.1, safetyScore),
             'result': result_text,
             'probabilities': {
                 'phishing': float(probabilities[0]),
