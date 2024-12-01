@@ -77,7 +77,9 @@ export default function Home() {
                 if (customResponse.data?.safetyScore) {
                     setScanState(prev => ({
                         ...prev,
-                        customSafetyScore: customResponse.data.safetyScore,
+                        customSafetyScore: customResponse.data?.safetyScore !== undefined
+                            ? Math.max(0, Math.min(100, Number(customResponse.data.safetyScore)))
+                            : 100,
                         customResult: customResponse.data.result
                     }));
                 }
