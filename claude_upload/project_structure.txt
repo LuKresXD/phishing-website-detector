@@ -81,7 +81,6 @@
 │   │       ├── Card.tsx
 │   │       ├── ErrorDisplay.tsx
 │   │       ├── Input.tsx
-│   │       ├── LoadingSpinner.tsx
 │   │       └── Progress.tsx
 │   ├── hooks
 │   │   └── useUrlValidation.ts
@@ -110,4 +109,4 @@
 └── typings
     └── index.d.ts
 
-25 directories, 86 files
+25 directories, 85 files

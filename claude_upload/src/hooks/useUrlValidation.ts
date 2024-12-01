@@ -5,12 +5,14 @@ export function useUrlValidation(url: string) {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        // Reset validation state for empty input
         if (!url.trim()) {
             setIsValid(false);
             setError('Please enter a URL');
             return;
         }
 
+        // Strict URL pattern requiring http/https protocol
         const urlPattern = /^(https?:\/\/)?(([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?(\/[-a-z0-9\._~:/?#[\]@!$&'()*+,;=%]*)?$/i;
 
         if (!urlPattern.test(url)) {
@@ -19,19 +21,19 @@ export function useUrlValidation(url: string) {
             return;
         }
 
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            setIsValid(false);
+            setError('URL must start with http:// or https://');
+            return;
+        }
+
         try {
             new URL(url);
             setIsValid(true);
             setError(null);
         } catch {
-            try {
-                new URL(`http://${url}`);
-                setIsValid(true);
-                setError(null);
-            } catch {
-                setIsValid(false);
-                setError('Invalid URL format. Please ensure the URL is correct');
-            }
+            setIsValid(false);
+            setError('Invalid URL format. Please ensure the URL is correct');
         }
     }, [url]);
 
