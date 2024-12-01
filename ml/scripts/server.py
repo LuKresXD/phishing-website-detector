@@ -60,17 +60,17 @@ def custom_scan():
         probabilities = model.predict_proba(features_df[feature_columns])[0]
         
         # Calculate safety score (0 to 100)
-        safety_score = int(probabilities[1] * 100)
-        if safety_score >= 70:
+        safetyScore = int(probabilities[1] * 100)
+        if safetyScore >= 70:
             result_text = 'Safe'
-        elif safety_score >= 40:
+        elif safetyScore >= 40:
             result_text = 'Moderate'
         else:
             result_text = 'Dangerous'
         
         response = {
             'url': url,
-            'safety_score': safety_score,
+            'safetyScore': safetyScore,
             'result': result_text,
             'probabilities': {
                 'phishing': float(probabilities[0]),

@@ -56,7 +56,7 @@ export default async function handler(req, res) {
 
             // Validate response structure
             const data = mlResponse.data;
-            if (typeof data.safety_score === 'number' &&
+            if (typeof data.safetyScore === 'number' &&
                 typeof data.result === 'string' &&
                 data.probabilities &&
                 typeof data.probabilities.legitimate === 'number' &&
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
 
                 const response = {
                     url: url,
-                    safetyScore: data.safety_score,
+                    safetyScore: data.safetyScore,
                     result: data.result,
                     probabilities: data.probabilities
                 };
