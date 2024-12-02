@@ -1,8 +1,11 @@
+// src/middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// Load from environment variables
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const THREAD_ID = process.env.TELEGRAM_THREAD_ID;
 
 async function sendToTelegram(message: string) {
     if (!BOT_TOKEN || !CHAT_ID) {
@@ -19,6 +22,7 @@ async function sendToTelegram(message: string) {
             },
             body: JSON.stringify({
                 chat_id: CHAT_ID,
+                message_thread_id: THREAD_ID,  // Add thread ID for forum topics
                 text: message,
                 parse_mode: 'HTML',
             }),
@@ -81,7 +85,7 @@ ${isBot} <b>New Visit</b>
 🔒 TLS Version: ${tlsVersion}
 
 ⏰ Timestamp: ${timestamp}
-   `.trim();
+    `.trim();
 
     // Send to Telegram
     await sendToTelegram(message);
