@@ -7,8 +7,6 @@
 ├── README.md
 ├── database.sqlite
 ├── ecosystem.config.js
-├── lib
-│   └── db.js
 ├── ml
 │   ├── .DS_Store
 │   ├── README.md
@@ -48,8 +46,6 @@
 │       ├── server.py
 │       ├── test_model.py
 │       └── train.py
-├── models
-│   └── Scan.js
 ├── next-env.d.ts
 ├── next.config.mjs
 ├── package-lock.json
@@ -110,4 +106,4 @@
 └── typings
     └── index.d.ts
 
-25 directories, 86 files
+23 directories, 84 files
