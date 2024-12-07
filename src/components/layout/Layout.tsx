@@ -65,7 +65,7 @@ export default function Layout({
                     <footer className="max-w-4xl w-full flex flex-col mx-auto pt-4 pb-2 text-white font-leaguespartan">
                         <div className="h-0.5 w-full rounded-lg bg-gradient-to-r from-secondary via-accent to-secondary" />
                         <p className="text-center font-semibold text-base pt-2">
-                            phishing.lukres.dev - Made with NextJS, TailwindCSS, and ❤ by me
+                            phishing.lukres.dev - Made with NextJS, TailwindCSS, Python, and ❤ by me
                         </p>
                         <p className="text-center font-medium brightness-75 text-base">
                             Last updated: Dec 7th, 2024
