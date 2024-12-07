@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { motion } from "framer-motion";
 import Typewriter from 'typewriter-effect';
@@ -10,16 +10,35 @@ import ModelInfo from "@/components/ModelInfo";
 import { addScan } from '@/utils/localStorageUtil';
 import ErrorDisplay from '@/components/ui/ErrorDisplay';
 
+interface ScanState {
+    virusTotalResult: string;
+    customResult: string;
+    virusTotalSafetyScore: number;
+    customSafetyScore: number;
+    scannedUrl: string;
+}
+
+interface CompletedScans {
+    vt: boolean;
+    ml: boolean;
+    saved: boolean;
+}
+
 export default function Home() {
     // State management with separate loading states
     const [vtLoading, setVtLoading] = useState(false);
     const [mlLoading, setMlLoading] = useState(false);
-    const [scanState, setScanState] = useState({
+    const [scanState, setScanState] = useState<ScanState>({
         virusTotalResult: 'Enter website',
         customResult: 'Enter website',
         virusTotalSafetyScore: 100,
         customSafetyScore: 100,
         scannedUrl: ''
+    });
+    const [completedScans, setCompletedScans] = useState<CompletedScans>({
+        vt: false,
+        ml: false,
+        saved: false
     });
     const [error, setError] = useState<string | null>(null);
     const [hasScanned, setHasScanned] = useState(false);
@@ -29,6 +48,22 @@ export default function Home() {
         threshold: 0.1,
         triggerOnce: true,
     });
+
+    // Effect to save history when both scans complete
+    useEffect(() => {
+        if (completedScans.vt && completedScans.ml && !completedScans.saved && hasScanned) {
+            const scanData = {
+                url: scanState.scannedUrl,
+                virusTotalResult: scanState.virusTotalResult,
+                customResult: scanState.customResult,
+                virusTotalSafetyScore: scanState.virusTotalSafetyScore,
+                customSafetyScore: scanState.customSafetyScore,
+                date: new Date().toISOString()
+            };
+            addScan(scanData);
+            setCompletedScans(prev => ({ ...prev, saved: true }));
+        }
+    }, [completedScans, scanState, hasScanned]);
 
     // API handlers
     const sendUrlToVirusTotal = async (url: string) => {
@@ -66,6 +101,7 @@ export default function Home() {
         setVtLoading(true);
         setMlLoading(true);
         setError(null);
+        setCompletedScans({ vt: false, ml: false, saved: false });
 
         const finalUrl = url.startsWith('http://') || url.startsWith('https://')
             ? url
@@ -86,6 +122,7 @@ export default function Home() {
                         customSafetyScore: customResponse.data.safetyScore,
                         customResult: customResponse.data.result
                     }));
+                    setCompletedScans(prev => ({ ...prev, ml: true }));
                 }
             })
             .catch(error => {
@@ -118,17 +155,7 @@ export default function Home() {
                 virusTotalSafetyScore: vtScore,
                 virusTotalResult: vtScore < 50 ? 'Dangerous' : vtScore < 80 ? 'Moderate' : 'Safe'
             }));
-
-            // Save scan history only after both scans complete
-            const scanData = {
-                url: finalUrl,
-                virusTotalResult: vtScore < 50 ? 'Dangerous' : vtScore < 80 ? 'Moderate' : 'Safe',
-                customResult: scanState.customResult,
-                virusTotalSafetyScore: vtScore,
-                customSafetyScore: scanState.customSafetyScore,
-                date: new Date().toISOString()
-            };
-            addScan(scanData);
+            setCompletedScans(prev => ({ ...prev, vt: true }));
 
         } catch (error) {
             console.error('VirusTotal scan error:', error);
