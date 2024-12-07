@@ -71,6 +71,12 @@ export default function Home() {
             ? url
             : `http://${url}`;
 
+        // Set initial state with the URL immediately
+        setScanState(prev => ({
+            ...prev,
+            scannedUrl: finalUrl
+        }));
+
         // Run ML model scan
         axios.post('/api/customScan', { url: finalUrl }, { timeout: 30000 })
             .then(customResponse => {
@@ -110,7 +116,6 @@ export default function Home() {
             setScanState(prev => ({
                 ...prev,
                 virusTotalSafetyScore: vtScore,
-                scannedUrl: vtResult.meta.url_info.url,
                 virusTotalResult: vtScore < 50 ? 'Dangerous' : vtScore < 80 ? 'Moderate' : 'Safe'
             }));
 
@@ -149,7 +154,7 @@ export default function Home() {
             >
                 <h1 className='font-bold sm:text-6xl text-4xl font-poppins text-center text-text mt-8 mb-6'>
                     <span className="text-blue-500">Phishing</span>
-                    <span className="text-blue-100"> Website Detector 🕵️‍</span>
+                    <span className="text-blue-100"> Website Detector 🕵️‍♂</span>
                 </h1>
                 <p className='text-blue-100 text-lg text-center font-poppins mb-8'>
                     {inView && (

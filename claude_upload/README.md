@@ -5,6 +5,8 @@
 ![Next.js](https://img.shields.io/badge/next.js-13.0+-000000.svg)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
 
+### This project is an Internal Assigment on Computer Science by Krestinin Luka
+
 A sophisticated web application combining machine learning and modern web technologies to detect phishing websites. The system utilizes both the VirusTotal API and a custom-trained machine learning model to provide comprehensive security assessments.
 
 → [**View Machine Learning Documentation**](ml/) ←

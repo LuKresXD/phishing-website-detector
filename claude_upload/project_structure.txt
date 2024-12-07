@@ -84,6 +84,7 @@
 │   │       └── Progress.tsx
 │   ├── hooks
 │   │   └── useUrlValidation.ts
+│   ├── middleware.ts
 │   ├── pages
 │   │   ├── _app.tsx
 │   │   ├── _document.tsx
@@ -109,4 +110,4 @@
 └── typings
     └── index.d.ts
 
-25 directories, 85 files
+25 directories, 86 files
