@@ -1,5 +1,5 @@
 import Cors from 'cors';
-import axios from 'axios';
+import { analyzeUrl } from '../../lib/mlScan';
 
 // Initialize the CORS middleware
 const cors = Cors({
@@ -19,9 +19,6 @@ function runMiddleware(req, res, fn) {
     });
 }
 
-const ML_SERVER_PORT = process.env.ML_SERVER_PORT || 5002;
-const ML_SERVER_URL = `http://127.0.0.1:${ML_SERVER_PORT}`;
-
 export default async function handler(req, res) {
     // Run the CORS middleware
     await runMiddleware(req, res, cors);
@@ -40,57 +37,19 @@ export default async function handler(req, res) {
                 .json({ error: 'Invalid or missing URL. Please provide a valid URL.' });
         }
 
-        try {
-            console.log(`Calling ML server at ${ML_SERVER_URL}/api/customScan`);
-            // Call Python ML server
-            const mlResponse = await axios.post(
-                `${ML_SERVER_URL}/api/customScan`,
-                { url },
-                {
-                    timeout: 30000,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
+        // Run the model in-process (formerly a Python/Flask sidecar on :5002).
+        const data = await analyzeUrl(url.trim());
 
-            // Validate response structure
-            const data = mlResponse.data;
-            if (typeof data.safetyScore === 'number' &&
-                typeof data.result === 'string' &&
-                data.probabilities &&
-                typeof data.probabilities.legitimate === 'number' &&
-                typeof data.probabilities.phishing === 'number') {
-
-                const response = {
-                    url: url,
-                    safetyScore: data.safetyScore,
-                    result: data.result,
-                    probabilities: data.probabilities
-                };
-
-                return res.status(200).json(response);
-            } else {
-                console.error('Invalid response structure from ML server:', data);
-                throw new Error('Invalid response structure from ML server');
-            }
-
-        } catch (error) {
-            console.error('ML prediction error:', error);
-            if (error.code === 'ECONNREFUSED') {
-                res.status(503).json({
-                    error: 'ML server is not running. Please ensure the Python server is started.',
-                });
-            } else {
-                res.status(500).json({
-                    error: `An error occurred during prediction: ${error.message}. Please try again later.`,
-                });
-            }
-        }
+        return res.status(200).json({
+            url: data.url,
+            safetyScore: data.safetyScore,
+            result: data.result,
+            probabilities: data.probabilities,
+        });
     } catch (error) {
         console.error('Custom scan error:', error);
         res.status(500).json({
-            error: `An unexpected error occurred: ${error.message}. Please try again later.`,
+            error: `An error occurred during prediction: ${error.message}. Please try again later.`,
         });
     }
 }
