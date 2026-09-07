@@ -18,9 +18,13 @@ updates:
         patterns:
           - "*"
     ignore:
+      # Hold ALL major bumps (they've broken the build before); handled manually.
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
+      # Hold Next entirely (major upgrade tracked manually) so it stays out of the
+      # grouped security PR and doesn't block the safe fixes.
+      - dependency-name: "next"
   - package-ecosystem: "pip"
     directory: "/ml"
     schedule:
