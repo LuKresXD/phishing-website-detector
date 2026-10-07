@@ -18,11 +18,11 @@
     "chart.js": "^4.4.6",
     "cheerio": "^1.2.0",
     "cors": "^2.8.5",
-    "csv-parse": "^5.5.6",
+    "csv-parse": "^7.0.3",
     "csv-stringify": "^6.8.3",
     "framer-motion": "^11.0.3",
     "lucide-react": "^0.577.0",
-    "next": "^14.2.8",
+    "next": "^15.5.24",
     "onnxruntime-web": "^1.29.0",
     "pattern.css": "^1.0.0",
     "react": "^18",
@@ -38,13 +38,13 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.5.4",
     "eslint": "^8",
-    "eslint-config-next": "14.2.35",
+    "eslint-config-next": "^15.5.24",
     "postcss": "^8.5.28",
     "tailwindcss": "^3.4.1",
     "typescript": "5.9.3"
   },
   "overrides": {
-    "postcss": "^8.5.28",
+    "postcss": "^8.5.23",
     "protobufjs": "^7.6.6"
   }
 }
